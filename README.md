@@ -11,6 +11,19 @@ __author__ = "Yisak Kim"
 
 
 ## VideoCature mode
-1. Uncomment line 51-53, 60, and 158-159.
-2. Set the path for the video file on line 51.
+1. Uncomment below codes
+
+- videoFile1 = './video001.avi'
+- ourcc = cv2.VideoWriter_fourcc(*'DIVX')
+- out = cv2.VideoWriter(videoFile1, fourcc, 9.0, (320,240))
+- out.write(image)
+- out.release()
+- cv2.destroyAllWindows()
+
+2. Set the path for the video file on " videoFile1 = './video001.avi' "
 3. Run 'Andycar3.py' on your Raspberry Pi using python3, and the rest is the same as 'Normal mode' above.
+
+
+## Object Detection
+- Detect Green Sign, "def make_cropped()". See "ObjectDetection" repository.
+

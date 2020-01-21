@@ -73,8 +73,8 @@ def make_cropped(img):
     ret, img_binary = cv2.threshold(img_gray, 20, 255, cv2.THRESH_BINARY)
     # cv2.imwrite("result_binary.jpeg", img_binary)
 
-    # _,contours, _ = cv2.findContours(img_binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    _, contours, _ = cv2.findContours(img_binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # contours, _ = cv2.findContours(img_binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours, _ = cv2.findContours(img_binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     tmp_con = []
     for c in contours:
@@ -214,7 +214,10 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         ang = int(ang)
 
         # Move Motors
-        Motor_Steer(0.4, (error * kp) + (ang * ap))
+        if mmode_flag:
+            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
+        else:
+            Motor_Steer(0.4, (error * kp) + (ang * ap))
         
         # Draw PID factors
         box = cv2.boxPoints(blackbox)

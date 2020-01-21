@@ -213,7 +213,9 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         error = int(x_min - setpoint)
         ang = int(ang)
 
-
+        # Move Motors
+        Motor_Steer(0.4, (error * kp) + (ang * ap))
+        
         # Draw PID factors
         box = cv2.boxPoints(blackbox)
         box = np.int0(box)

@@ -254,7 +254,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
                 time4.append(time.time() - start_time)
                 print("address: 203")
                 address = 4
-            elif address == 4 and ang > 25:
+            elif address == 4 and ang > 30:
                 time5.append(time.time() - start_time)
                 print("address: 202")
                 address = 5

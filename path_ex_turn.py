@@ -242,53 +242,53 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
         # address
         if ccw:
-            if address == 0 and ang < -60:
+            if address == 0 and ang < -65:
                 time01 = time.time() - time01
                 print("address: 101")
                 address = 1
                 start = False
-            elif address == 1 and ang > 20:
+            elif address == 1 and ang > -10:
                 time12 = time.time() - time12
                 print("address: 102")
                 address = 2
-            elif address == 2 and ang < -70:
+            elif address == 2 and ang < -60:
                 time23 = time.time() - time23
                 print("address: 103")
                 address = 3
             elif address == 3 and ang > -30:
                 address = 34
-            elif address == 34 and ang < -70:
+            elif address == 34 and ang < -65:
                 time34 = time.time() - time34
                 print("address: 203")
                 address = 4
-            elif address == 4 and ang > -10:
+            elif address == 4 and ang > 20:
                 time45 = time.time() - time45
                 print("address: 202")
                 address = 5
-            elif address == 5 and ang < -60:
+            elif address == 5 and ang < -65:
                 time56 = time.time() - time56
                 print("address: 201")
                 address = 6
         else:
-            if address == 0 and ang > 60:
+            if address == 0 and ang > 65:
                 print("address: 201")
                 address = 6
                 start = False
-            elif address == 6 and ang < 25:
+            elif address == 6 and ang < -20:
                 print("address: 202")
                 address = 5
-            elif address == 5 and ang > 68:
+            elif address == 5 and ang > 65:
                 print("address: 203")
                 address = 4
-            elif address == 4 and ang < 30:
+            elif address == 4 and ang < 35:
                 address = 43
-            elif address == 43 and ang > 70:
+            elif address == 43 and ang > 65:
                 print("address: 103")
                 address = 3
-            elif address == 3 and ang < -10:
+            elif address == 3 and ang < 10:
                 print("address: 102")
                 address = 2
-            elif address == 2 and ang > 68:
+            elif address == 2 and ang > 65:
                 print("address: 101")
                 address = 1
 

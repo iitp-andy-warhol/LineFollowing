@@ -10,7 +10,7 @@ import pickle
 #     a = None
 start = True
 mmode_flag = False
-ccw = False
+ccw = True
 stop0 = False
 stop1 = False
 stop2 = False

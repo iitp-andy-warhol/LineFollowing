@@ -154,12 +154,13 @@ def follower():
     kp = 0.75  # off line
     ap = 1.0  # off angle
 
-    path = command['path']
+    next_path = command['path']
     path_id = command['path_id']
     message = command['message']
     current_command = None
     current_path_id = None
     current_path = None
+    path = None
 
 
     x_last = 160

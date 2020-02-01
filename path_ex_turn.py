@@ -270,25 +270,30 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
                 print("address: 201")
                 address = 6
         else:
-            if address == 0 and ang > 65:
+            if address == 0 and ang > 70:
                 print("address: 201")
                 address = 6
                 start = False
             elif address == 6 and ang < -20:
+                time60 = time.time() - time60
                 print("address: 202")
                 address = 5
-            elif address == 5 and ang > 65:
+            elif address == 5 and ang > 70:
+                time56 = time.time() - time56
                 print("address: 203")
                 address = 4
             elif address == 4 and ang < 35:
                 address = 43
             elif address == 43 and ang > 65:
+                time45 = time.time() - time45
                 print("address: 103")
                 address = 3
             elif address == 3 and ang < 10:
+                time34 = time.time() - time34
                 print("address: 102")
                 address = 2
             elif address == 2 and ang > 65:
+                time23 = time.time() - time23
                 print("address: 101")
                 address = 1
 

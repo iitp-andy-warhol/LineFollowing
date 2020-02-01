@@ -661,6 +661,8 @@ command = {
     'path_id': 9999  # to ignore same path
 }
 
+ccw = True
+
 send_status_flag = False
 send_status_flag_lock = th.Lock()
 # receive_command_flag = True

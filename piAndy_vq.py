@@ -187,7 +187,7 @@ def follower():
 
         else:  # action != "moving" and action != "M-mode":
             path_id = command['path_id']
-            if command['path'] is not None and path_id != current_path_id:
+            if command['path'] is not None:  #  and path_id != current_path_id:
                 next_path = command['path']
 
             if command['message'] == 'loading_complete':
@@ -204,7 +204,7 @@ def follower():
 
         # Path handler
         if get_flag:
-            if path_id != current_path_id:
+            if path != next_path:
                 print("get new path")
                 current_path = list(next_path)
                 path = next_path

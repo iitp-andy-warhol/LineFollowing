@@ -187,7 +187,7 @@ def follower():
 
         else:  # action != "moving" and action != "M-mode":
             path_id = command['path_id']
-            if command['path'] is not None:  # and path_id != current_path_id:
+            if command['path'] is not None and path_id != current_path_id:
                 next_path = command['path']
                 current_path_id = np.copy(path_id)
 
@@ -205,10 +205,11 @@ def follower():
 
         # Path handler
         if get_flag:
-            if next_path != path:
+            if path_id != current_path_id:
                 print("get new path")
                 current_path = list(next_path)
                 path = next_path
+                current_path_id = np.copy(path_id)
             # stop0 = True
             # stop1, stop2, stop3, stop4, stop5, stop6, msg0, msg1, msg2, msg3, msg4, msg5, msg6, turn0, turn1, turn2, turn3, turn4, turn5, turn6 = make_TF(20, False)
 

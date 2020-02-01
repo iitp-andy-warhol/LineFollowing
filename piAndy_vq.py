@@ -189,7 +189,6 @@ def follower():
             path_id = command['path_id']
             if command['path'] is not None and path_id != current_path_id:
                 next_path = command['path']
-                current_path_id = np.copy(path_id)
 
             if command['message'] == 'loading_complete':
                 good_to_go_loading = True

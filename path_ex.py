@@ -10,7 +10,7 @@ import pickle
 #     a = None
 start = True
 mmode_flag = False
-ccw = True
+ccw = False
 stop0 = False
 stop1 = False
 stop2 = False
@@ -264,24 +264,30 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
                 address = 6
         else:
             if address == 0 and ang > 65:
+                time1.append(time.time() - start_time)
                 print("address: 201")
                 address = 6
                 start = False
             elif address == 6 and ang < -20:
+                time2.append(time.time() - start_time)
                 print("address: 202")
                 address = 5
             elif address == 5 and ang > 65:
+                time3.append(time.time() - start_time)
                 print("address: 203")
                 address = 4
             elif address == 4 and ang < 35:
                 address = 43
             elif address == 43 and ang > 65:
+                time4.append(time.time() - start_time)
                 print("address: 103")
                 address = 3
             elif address == 3 and ang < 10:
+                time5.append(time.time() - start_time)
                 print("address: 102")
                 address = 2
             elif address == 2 and ang > 65:
+                time6.append(time.time() - start_time)
                 print("address: 101")
                 address = 1
 
@@ -451,7 +457,7 @@ mean['time45'] = avg(results['time45'])
 mean['time56'] = avg(results['time56'])
 mean['time60'] = avg(results['time60'])
 
-f = open("path_ccw_p.pkl", "wb")
+f = open("path_cw_p.pkl", "wb")
 pickle.dump(mean, f)
 f.close()
 

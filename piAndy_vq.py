@@ -155,7 +155,7 @@ def follower():
     ap = 1.0  # off angle
 
     next_path = command['path']
-    path_id = command['path_id']
+    path_id = 9999
     message = command['message']
     current_command = None
     current_path_id = None

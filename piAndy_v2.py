@@ -257,6 +257,17 @@ def follower():
             print('get unloading complete!!')
             command['message'] = None
 
+
+        # stop False handler
+        address0.get_stop()
+        address1.get_stop()
+        address2.get_stop()
+        address3.get_stop()
+        address4.get_stop()
+        address5.get_stop()
+        address6.get_stop()
+        
+
         # Path handler
         if get_drive:
             if path_id != current_path_id:

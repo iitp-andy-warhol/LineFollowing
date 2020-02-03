@@ -71,6 +71,7 @@ def HQ_client():
 def follower():
     global send_status_flag, send_status_flag_lock
     global direction, current_address, action, send_status_flag, command
+    global good_to_go_loading, good_to_go_unloading
 
     def change_flag(flag):
         if flag:
@@ -236,10 +237,12 @@ def follower():
 
         if command['message'] == 'loading_complete':
             good_to_go_loading = True
+            print('get loading complete!!')
             command['message'] = None
 
         if command['message'] == 'unloading_complete':
             good_to_go_unloading = True
+            print('get unloading complete!!')
             command['message'] = None
 
         # Path handler
@@ -409,6 +412,7 @@ def follower():
         #     stop = False
 
         if operating_drive == 9:
+            turn(ccw)
             ccw = change_flag(ccw)
             get_drive = True
         else:

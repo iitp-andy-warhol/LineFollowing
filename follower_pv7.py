@@ -128,7 +128,7 @@ def turn(ccw):
         if address == 5:
             kit.continuous_servo[0].throttle = 1
             kit.continuous_servo[1].throttle = 1
-            time.sleep(1.0)
+            time.sleep(0.9)
         else:
             kit.continuous_servo[0].throttle = 1
             kit.continuous_servo[1].throttle = 1
@@ -292,7 +292,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
         elif area < 8500.0:
             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
-            print('obstacle')
+            print('obstacle: ', area)
         elif address == 0 and start and turn0:
             kit.continuous_servo[0].throttle = 1
             kit.continuous_servo[1].throttle = 1

@@ -110,18 +110,27 @@ def follower():
 
     def turn(ccw):
         if ccw:
-            if address == 5:
+            if address == 5 or address == 2:
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = 1
-                time.sleep(1.0)
+                time.sleep(0.9)
+            elif address == 1:
+                kit.continuous_servo[0].throttle = -1
+                kit.continuous_servo[1].throttle = -1
+                time.sleep(0.8)
             else:
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = 1
                 time.sleep(1.15)
         else:
-            kit.continuous_servo[0].throttle = -1
-            kit.continuous_servo[1].throttle = -1
-            time.sleep(1.12)
+            if address == 5:
+                kit.continuous_servo[0].throttle = -1
+                kit.continuous_servo[1].throttle = -1
+                time.sleep(0.9)
+            else:
+                kit.continuous_servo[0].throttle = -1
+                kit.continuous_servo[1].throttle = -1
+                time.sleep(1.12)
 
 
     class Address:
@@ -320,7 +329,9 @@ def follower():
                 if address == 0 and ang > 40:
                     print("error: turn to ccw")
                     turn(ccw)
-                elif address == 0 and ang < -65:
+                elif address == 0 and ang < -60:
+                    road = 101
+                elif road == 101 and ang > -60:
                     print("address: 101")
                     address = 1
                 elif address == 1 and ang > -10:
@@ -345,7 +356,9 @@ def follower():
                 if address == 0 and ang < -40:
                     print("error: turn to cw")
                     turn(ccw)
-                elif address == 0 and ang > 65:
+                elif address == 0 and ang > 60:
+                    road = 201
+                elif road == 201 and ang < 60:
                     print("address: 201")
                     address = 6
                 elif address == 6 and ang < -20:
@@ -387,7 +400,7 @@ def follower():
             action = "M-mode"
             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
             stop = True
-        elif area_box < 8500.0:  # obstacle handler
+        elif area_box < 7500.0:  # obstacle handler
             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
             print('obstacle ahead')
             action = 'obstacle'

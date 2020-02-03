@@ -405,8 +405,8 @@ def follower():
             print('obstacle ahead')
             action = 'obstacle'
             stop = True
-        else:
-            stop = False
+        # else:
+        #     stop = False
 
         if operating_drive == 9:
             ccw = change_flag(ccw)

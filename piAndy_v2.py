@@ -266,7 +266,7 @@ def follower():
         address4.get_stop()
         address5.get_stop()
         address6.get_stop()
-        
+
 
         # Path handler
         if get_drive:

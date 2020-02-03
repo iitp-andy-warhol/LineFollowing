@@ -126,7 +126,7 @@ def Motor_Steer(speed, steering, stop=False):
 def turn(ccw):
     if ccw:
         print("turn ccw!!")
-        if address == 5 or 2:
+        if address == 5 or address == 2:
             print("turn2 or 5!!")
             kit.continuous_servo[0].throttle = 1
             kit.continuous_servo[1].throttle = 1

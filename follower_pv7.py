@@ -300,7 +300,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         # stop
         if mmode_flag:
             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
-        elif area < 8500.0:
+        elif area < 7500.0:
             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
             print('obstacle: ', area)
         elif address == 0 and start and turn0:

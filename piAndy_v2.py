@@ -185,7 +185,7 @@ def follower():
     # # receive_command_flag = True
     # stop0 = True
     # stop1, stop2, stop3, stop4, stop5, stop6, msg0, msg1, msg2, msg3, msg4, msg5, msg6, turn0, turn1, turn2, turn3, turn4, turn5, turn6 = make_TF(20, False)
-    # stop_trigger = False
+    stop_trigger = False
     # turn_flag = False
     # loading_block = False
     # operating_path = 0

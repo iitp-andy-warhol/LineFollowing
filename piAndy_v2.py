@@ -110,9 +110,14 @@ def follower():
 
     def turn(ccw):
         if ccw:
-            kit.continuous_servo[0].throttle = 1
-            kit.continuous_servo[1].throttle = 1
-            time.sleep(1.15)
+            if address == 5:
+                kit.continuous_servo[0].throttle = 1
+                kit.continuous_servo[1].throttle = 1
+                time.sleep(1.0)
+            else:
+                kit.continuous_servo[0].throttle = 1
+                kit.continuous_servo[1].throttle = 1
+                time.sleep(1.15)
         else:
             kit.continuous_servo[0].throttle = -1
             kit.continuous_servo[1].throttle = -1

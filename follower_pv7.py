@@ -142,9 +142,14 @@ def turn(ccw):
             time.sleep(1.15)
     else:
         print("turn cw!!")
-        kit.continuous_servo[0].throttle = -1
-        kit.continuous_servo[1].throttle = -1
-        time.sleep(1.12)
+        if address == 5:
+            kit.continuous_servo[0].throttle = -1
+            kit.continuous_servo[1].throttle = -1
+            time.sleep(0.9)
+        else:
+            kit.continuous_servo[0].throttle = -1
+            kit.continuous_servo[1].throttle = -1
+            time.sleep(1.12)
 
 
 def change_dir(ccw):

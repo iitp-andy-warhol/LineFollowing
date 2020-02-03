@@ -355,11 +355,12 @@ def follower():
                 if address == 0 and ang > 40:
                     print("error: turn to ccw")
                     turn(ccw)
-                elif address == 0 and ang < -50:
+                elif address == 0 and ang < -60:
                     road = 101
-                elif road == 101 and ang > -50:
+                elif road == 101 and ang > -60:
                     print("address: 101")
                     address = 1
+                    road = 0
                 elif address == 1 and ang > -10:
                     print("address: 102")
                     address = 2
@@ -382,11 +383,12 @@ def follower():
                 if address == 0 and ang < -40:
                     print("error: turn to cw")
                     turn(ccw)
-                elif address == 0 and ang > 50:
+                elif address == 0 and ang > 60:
                     road = 201
-                elif road == 201 and ang < 50:
+                elif road == 201 and ang < 60:
                     print("address: 201")
                     address = 6
+                    road = 0
                 elif address == 6 and ang < -20:
                     print("address: 202")
                     address = 5

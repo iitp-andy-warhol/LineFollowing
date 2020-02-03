@@ -452,7 +452,7 @@ def follower():
 
         if not stop:
             action = "moving"
-            print("moving!!")
+            # print("moving!!")
             Motor_Steer(0.4, (error * kp) + (ang * ap))
 
         # Send robot status

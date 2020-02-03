@@ -236,7 +236,9 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
                 if address == 0 and ang > 40:
                     print("error: turn to ccw")
                     turn(not ccw)
-                if address == 0 and ang < -65:
+                if address == 0 and ang < -60:
+                    address = 101
+                elif address == 101 and ang > -60:
                     print("address: 101")
                     address = 1
                     start = False

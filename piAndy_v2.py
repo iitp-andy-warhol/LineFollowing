@@ -71,7 +71,7 @@ def HQ_client():
 def follower():
     global send_status_flag, send_status_flag_lock
     global direction, current_address, action, send_status_flag, command
-    global good_to_go_loading, good_to_go_unloading
+    global good_to_go_loading, good_to_go_unloading, get_drive
 
     def change_flag(flag):
         if flag:
@@ -412,6 +412,7 @@ def follower():
         #     stop = False
 
         if operating_drive == 9:
+            print("turn!")
             turn(ccw)
             ccw = change_flag(ccw)
             get_drive = True
@@ -423,6 +424,7 @@ def follower():
             address4.get_stop()
             address5.get_stop()
             address6.get_stop()
+            print("after flag: ", stop)
 
         if not stop:
             action = "moving"
@@ -508,6 +510,7 @@ command = {
 ccw = True
 good_to_go_loading = False
 good_to_go_unloading = False
+get_drive = False
 
 send_status_flag = False
 send_status_flag_lock = th.Lock()

@@ -136,6 +136,10 @@ def follower():
                 time.sleep(1.12)
                 kit.continuous_servo[0].throttle = 0
                 kit.continuous_servo[1].throttle = 0
+            elif address == 4:
+                kit.continuous_servo[0].throttle = -1
+                kit.continuous_servo[1].throttle = -1
+                time.sleep(1.2)
             elif address == 5:
                 kit.continuous_servo[0].throttle = -1
                 kit.continuous_servo[1].throttle = -1
@@ -260,6 +264,19 @@ def follower():
             good_to_go_unloading = True
             print('get unloading complete!!')
             command['message'] = None
+
+
+        if mmode_flag: # M-mode handler
+            action = "M-mode"
+            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
+            stop = True
+        elif area_box < 7500.0:  # obstacle handler
+            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
+            print('obstacle ahead')
+            action = 'obstacle'
+            stop = True
+        else:
+            stop = False
 
 
         # stop False handler
@@ -428,18 +445,6 @@ def follower():
         area_box = w_box * h_box
 
         # Stop handler
-        if mmode_flag: # M-mode handler
-            action = "M-mode"
-            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
-            stop = True
-        elif area_box < 7500.0:  # obstacle handler
-            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
-            print('obstacle ahead')
-            action = 'obstacle'
-            stop = True
-        # else:
-        #     stop = False
-
         if operating_drive == 9:
             print("turn!")
             turn(ccw)

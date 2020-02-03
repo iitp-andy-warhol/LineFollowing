@@ -250,6 +250,7 @@ def follower():
             if len(current_path) > 0:
                 operating_drive = current_path.pop(0)
                 print("Next drive: ", operating_drive)
+                print("stop: ", stop)
                 get_drive = False
             else:
                 operating_drive = 0
@@ -421,7 +422,7 @@ def follower():
 
         if not stop:
             action = "moving"
-            print("moving!!")
+            print("moving!!", stop)
             Motor_Steer(0.4, (error * kp) + (ang * ap))
 
         # Send robot status

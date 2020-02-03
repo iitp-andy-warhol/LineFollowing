@@ -502,6 +502,8 @@ command = {
 }
 
 ccw = True
+good_to_go_loading = False
+good_to_go_unloading = False
 
 send_status_flag = False
 send_status_flag_lock = th.Lock()

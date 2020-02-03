@@ -239,6 +239,7 @@ def follower():
     address = 0
     road = 0
     address0_time = 0
+    area_box = 10000.0
     ang_list = []
 
     start_time = time.time()

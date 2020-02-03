@@ -53,7 +53,7 @@ def HQ_client():
         return dic
 
     # Connect to HQ
-    HQ_ip = '128.237.173.35'
+    HQ_ip = '128.237.218.91'
     HQ_port = 8090
 
     clientSock = socket(AF_INET, SOCK_STREAM)
@@ -78,12 +78,6 @@ def follower():
         else:
             flag = True
         return flag
-
-    def make_TF(amount, tf):
-        initialize_flags = []
-        for flags in range(amount):
-            initialize_flags += [tf]
-        return initialize_flags
 
     def Motor_Steer(speed, steering, stop=False):
         global ccw
@@ -125,18 +119,67 @@ def follower():
             time.sleep(1.12)
 
 
+    class Address:
+        def __init__(self, id, msg):
+            self.id = id
+            self.msg = msg
+
+        def get_stop(self):
+            global action, stop, get_drive, good_to_go_loading, good_to_go_unloading
+            if self.id == operating_drive:
+                if self.id == address:
+                    stop = True
+                    Motor_Steer(0.4, (error * kp) + (ang * ap), True)
+                    if self.id == 0:
+                        action = "loading"
+                        if good_to_go_loading:
+                            stop = False
+                            get_drive = True
+                            good_to_go_loading = False
+                            print("Loading Confirm!!!")
+                    else:
+                        action = "unloading"
+                        if good_to_go_unloading:
+                            stop = False
+                            get_drive = True
+                            good_to_go_unloading = False
+                            print("Unloading Confirm!!!")
+
+    address0 = Address(0, False)
+    address1 = Address(1, False)
+    address2 = Address(2, False)
+    address3 = Address(3, False)
+    address4 = Address(4, False)
+    address5 = Address(5, False)
+    address6 = Address(6, False)
+
+
     # Follower
     # Make flags
-    get_flag, ccw = make_TF(2, True)
-    start, good_to_go_loading, good_to_go_unloading, mmode_flag = make_TF(4, False)
-    # receive_command_flag = True
-    stop0 = True
-    stop1, stop2, stop3, stop4, stop5, stop6, msg0, msg1, msg2, msg3, msg4, msg5, msg6, turn0, turn1, turn2, turn3, turn4, turn5, turn6 = make_TF(20, False)
-    stop_trigger = False
-    turn_flag = False
-    loading_block = False
-    operating_path = 0
-    loading_get_flag = False
+    operating_drive = None
+    get_drive = True
+    ccw = True
+    mmode_flag = False
+    stop = True
+    good_to_go_loading = False
+    good_to_go_unloading = False
+
+    current_path_id = None
+    current_path = None
+    # get_flag, ccw = make_TF(2, True)
+    # start, good_to_go_loading, good_to_go_unloading, mmode_flag = make_TF(4, False)
+    # # receive_command_flag = True
+    # stop0 = True
+    # stop1, stop2, stop3, stop4, stop5, stop6, msg0, msg1, msg2, msg3, msg4, msg5, msg6, turn0, turn1, turn2, turn3, turn4, turn5, turn6 = make_TF(20, False)
+    # stop_trigger = False
+    # turn_flag = False
+    # loading_block = False
+    # operating_path = 0
+    # loading_get_flag = False
+    next_path = command['path']
+    path_id = command['path_id']
+    message = command['message']
+
 
     # Start PiCam
     camera = PiCamera()
@@ -153,15 +196,6 @@ def follower():
 
     kp = 0.75  # off line
     ap = 1.0  # off angle
-
-    next_path = command['path']
-    path_id = 9999
-    message = command['message']
-    current_command = None
-    current_path_id = None
-    current_path = None
-    path = None
-
 
     x_last = 160
     y_last = 120
@@ -182,94 +216,31 @@ def follower():
         counter += 1
 
         # Command handler
-        if command['path'] == (0,):
-            start = False
+        path_id = command['path_id']
+        if command['path'] is not None:  # and path_id != current_path_id:
+            next_path = command['path']
+            # current_path_id = path_id
 
-        else:  # action != "moving" and action != "M-mode":
-            path_id = command['path_id']
-            if command['path'] is not None:  #  and path_id != current_path_id:
-                next_path = command['path']
+        if command['message'] == 'loading_complete':
+            good_to_go_loading = True
+            command['message'] = None
 
-            if command['message'] == 'loading_complete':
-                good_to_go_loading = True
-                command['message'] = None
-
-            if command['message'] == 'unloading_complete':
-                good_to_go_unloading = True
-                command['message'] = None
-
-        if current_command != command:
-            print("Command: ", command)
-            current_command = np.copy(command)
+        if command['message'] == 'unloading_complete':
+            good_to_go_unloading = True
+            command['message'] = None
 
         # Path handler
-        if get_flag:
-            if path != next_path:
-                print("get new path")
+        if get_drive:
+            if path_id != current_path_id:
                 current_path = list(next_path)
-                path = next_path
                 current_path_id = np.copy(path_id)
-            # stop0 = True
-            # stop1, stop2, stop3, stop4, stop5, stop6, msg0, msg1, msg2, msg3, msg4, msg5, msg6, turn0, turn1, turn2, turn3, turn4, turn5, turn6 = make_TF(20, False)
-
-            if len(current_path) > 1 and current_path[1] == 9:
-                operating_path = current_path.pop(0)
-                operating_turn = current_path.pop(0)
-                turn_flag = True
-                print('Next: ', operating_path, operating_turn)
-            elif len(current_path) > 0 and current_path[0] != 0:
-                operating_path = current_path.pop(0)
-                print('Next: ', operating_path)
+            if len(current_path) > 0:
+                operating_drive = current_path.pop(0)
+                print("Next drive: ", operating_drive)
+                get_drive = False
             else:
-                operating_path = 0
-                print('No Next path')
-                loading_get_flag = True
-
-            if operating_path == 1:
-                stop1 = True
-                msg1 = True
-                if turn_flag:
-                    turn1 = True
-                    turn_flag = False
-            elif operating_path == 2:
-                stop2 = True
-                msg2 = True
-                if turn_flag:
-                    turn2 = True
-                    turn_flag = False
-            elif operating_path == 3:
-                stop3 = True
-                msg3 = True
-                if turn_flag:
-                    turn3 = True
-                    turn_flag = False
-            elif operating_path == 4:
-                stop4 = True
-                msg4 = True
-                if turn_flag:
-                    turn4 = True
-                    turn_flag = False
-            elif operating_path == 5:
-                stop5 = True
-                msg5 = True
-                if turn_flag:
-                    turn5 = True
-                    turn_flag = False
-            elif operating_path == 6:
-                stop6 = True
-                msg6 = True
-                if turn_flag:
-                    turn6 = True
-                    turn_flag = False
-            elif operating_path == 0:
-                stop0 = True
-                if not loading_block:
-                    msg0 = True
-                if turn_flag:
-                    turn0 = True
-                    turn_flag = False
-
-            get_flag = False
+                operating_drive = 0
+                get_drive = False
 
         # Image handler
         image = frame.array
@@ -344,11 +315,9 @@ def follower():
                 if address == 0 and ang > 40:
                     print("error: turn to ccw")
                     turn(ccw)
-                    # ignorestop = True
                 elif address == 0 and ang < -65:
                     print("address: 101")
                     address = 1
-                    start = False
                 elif address == 1 and ang > -10:
                     print("address: 102")
                     address = 2
@@ -371,11 +340,9 @@ def follower():
                 if address == 0 and ang < -40:
                     print("error: turn to cw")
                     turn(ccw)
-                    # ignorestop = True
                 elif address == 0 and ang > 65:
                     print("address: 201")
                     address = 6
-                    start = False
                 elif address == 6 and ang < -20:
                     print("address: 202")
                     address = 5
@@ -404,7 +371,6 @@ def follower():
                 print("address: LZ")
                 address = 0
                 stop_trigger = False
-                start = False
 
         # Obstacle handler
         _, wh_box, _ = blackbox
@@ -415,134 +381,28 @@ def follower():
         if mmode_flag: # M-mode handler
             action = "M-mode"
             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
+            stop = True
         elif area_box < 8500.0:  # obstacle handler
             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
             print('obstacle ahead')
             action = 'obstacle'
-        # elif address == 0 and start and turn0:
-        #     action = "moving"
-        #     turn(ccw)
-        #     time.sleep(1.2)
-        #     kit.continuous_servo[0].throttle = 0
-        #     kit.continuous_servo[1].throttle = 0
-        #     time.sleep(0.01)
-        #     ccw = change_flag(ccw)
-        #     turn0 = False
-        # elif address == 0 and stop0 and not start:
-        #     action = "loading"
-        #     Motor_Steer(0.4, (error * kp) + (ang * ap), True)
-        #     if msg0:
-        #         # path, " done"
-        #         msg0 = False
-        #         get_flag = True
-        #     if good_to_go_loading:
-        #         start = True
-        #         good_to_go_loading = False
-        elif address == 0 and stop0 and not good_to_go_loading:
-            action = "loading"
-            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
-            if loading_get_flag:
-                get_flag = True
-                loading_get_flag = False
-            if msg0:
-                print("loading")
-                msg0 = False
-                loading_block = True
-        elif address == 0 and stop0 and good_to_go_loading:
-            good_to_go_loading = False
-            stop0 = False
-            start = True
-            get_flag = False
-            loading_block = False
-            if turn0:
-                turn(ccw)
-                ccw = change_flag(ccw)
-                turn0 = False
-        elif address == 1 and stop1:
-            action = "unloading"
-            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
-            if turn1:
-                turn(ccw)
-                ccw = change_flag(ccw)
-                turn1 = False
-            if msg1:
-                print("unloading")
-                msg1 = False
-            if good_to_go_unloading:
-                good_to_go_unloading = False
-                stop1 = False
-                get_flag = True
-        elif address == 2 and stop2:
-            action = "unloading"
-            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
-            if turn2:
-                turn(ccw)
-                ccw = change_flag(ccw)
-                turn2 = False
-            if msg2:
-                print("unloading")
-                msg2 = False
-            if good_to_go_unloading:
-                good_to_go_unloading = False
-                stop2 = False
-                get_flag = True
-        elif address == 3 and stop3:
-            action = "unloading"
-            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
-            if turn3:
-                turn(ccw)
-                ccw = change_flag(ccw)
-                turn3 = False
-            if msg3:
-                print("unloading")
-                msg3 = False
-            if good_to_go_unloading:
-                good_to_go_unloading = False
-                stop3 = False
-                get_flag = True
-        elif address == 4 and stop4:
-            action = "unloading"
-            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
-            if turn4:
-                turn(ccw)
-                ccw = change_flag(ccw)
-                turn4 = False
-            if msg4:
-                print("unloading")
-                msg4 = False
-            if good_to_go_unloading:
-                good_to_go_unloading = False
-                stop4 = False
-                get_flag = True
-        elif address == 5 and stop5:
-            action = "unloading"
-            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
-            if turn5:
-                turn(ccw)
-                ccw = change_flag(ccw)
-                turn5 = False
-            if msg5:
-                print("unloading")
-                msg5 = False
-            if good_to_go_unloading:
-                good_to_go_unloading = False
-                stop5 = False
-                get_flag = True
-        elif address == 6 and stop6:
-            action = "unloading"
-            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
-            if turn6:
-                turn(ccw)
-                ccw = change_flag(ccw)
-                turn6 = False
-            if msg6:
-                print("unloading")
-                msg6 = False
-            if good_to_go_unloading:
-                good_to_go_unloading = False
-                stop6 = False
-                get_flag = True
+            stop = True
         else:
+            stop = False
+
+        if operating_drive == 9:
+            ccw = change_flag(ccw)
+            get_drive = True
+        else:
+            address0.get_stop()
+            address1.get_stop()
+            address2.get_stop()
+            address3.get_stop()
+            address4.get_stop()
+            address5.get_stop()
+            address6.get_stop()
+
+        if not stop:
             action = "moving"
             Motor_Steer(0.4, (error * kp) + (ang * ap))
 
@@ -580,49 +440,10 @@ def follower():
         key = cv2.waitKey(1) & 0xFF
         # Manually Confirm
         if key == ord("y"):
-            if address == 0 and stop0 and not start:
-                if turn0:
-                    turn(ccw)
-                    ccw = change_flag(ccw)
-                    turn0 = False
-                stop0 = False
-                start = True
-            elif address == 1 and stop1:
-                if turn1:
-                    turn(ccw)
-                    ccw = change_flag(ccw)
-                    turn1 = False
-                stop1 = False
-            elif address == 2 and stop2:
-                if turn2:
-                    turn(ccw)
-                    ccw = change_flag(ccw)
-                    turn2 = False
-                stop2 = False
-            elif address == 3 and stop3:
-                if turn3:
-                    turn(ccw)
-                    ccw = change_flag(ccw)
-                    turn3 = False
-                stop3 = False
-            elif address == 4 and stop4:
-                if turn4:
-                    turn(ccw)
-                    ccw = change_flag(ccw)
-                    turn4 = False
-                stop4 = False
-            elif address == 5 and stop5:
-                if turn5:
-                    turn(ccw)
-                    ccw = change_flag(ccw)
-                    turn5 = False
-                stop5 = False
-            elif address == 6 and stop6:
-                if turn6:
-                    turn(ccw)
-                    ccw = change_flag(ccw)
-                    turn6 = False
-                stop6 = False
+            if action == "loading":
+                good_to_go_loading = True
+            elif action == "unloading":
+                good_to_go_unloading = True
         # M-mode on/off
         elif key == ord("z"):
             mmode_flag = True
@@ -665,8 +486,6 @@ ccw = True
 
 send_status_flag = False
 send_status_flag_lock = th.Lock()
-# receive_command_flag = True
-# receive_command_flag_lock = th.Lock()
 
 # Start threads
 communicator = th.Thread(target=HQ_client, args=())

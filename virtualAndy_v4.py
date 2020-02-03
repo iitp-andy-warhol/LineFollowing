@@ -51,13 +51,6 @@ def change_flag(flag):
     return flag
 
 
-def make_TF(amount, tf):
-    initialize_flags = []
-    for flags in range(amount):
-        initialize_flags += [tf]
-    return initialize_flags
-
-
 def Drive(ccw, car, car_speed, rx, ty, lx, by):
 
     if ccw:
@@ -278,17 +271,14 @@ class Address:
                         stop = False
                         get_drive = True
                         good_to_go_loading = False
+                        print("Loading Confirm!!!")
                 else:
                     action = "unloading"
                     if good_to_go_unloading:
                         stop = False
                         get_drive = True
                         good_to_go_unloading = False
-
-
-
-    # def stop_flag(self):
-    #     self.stop = True
+                        print("Unloading Confirm!!!")
 
 
 address0 = Address(0, False)
@@ -318,29 +308,24 @@ good_to_go_unloading = False
 
 current_path_id = None
 current_path = None
-path = None
 
 
 # Main game loop
 while True:
 
     # command handler
-    if command['path'] == (0,):
-        start = False
+    path_id = command['path_id']
+    if command['path'] is not None:  # and path_id != current_path_id:
+        next_path = command['path']
+        # current_path_id = path_id
 
-    else:  # action == 'unloading' or receive_command_flag: and action != "M-mode":
-        # receive_command_flag = False
-        path_id = command['path_id']
-        if command['path'] is not None:  # and path_id != current_path_id:
-            next_path = command['path']
+    if command['message'] == 'loading_complete':
+        good_to_go_loading = True
+        command['message'] = None
 
-        if command['message'] == 'loading_complete':
-            good_to_go_loading = True
-            command['message'] = None
-
-        if command['message'] == 'unloading_complete':
-            good_to_go_unloading = True
-            command['message'] = None
+    if command['message'] == 'unloading_complete':
+        good_to_go_unloading = True
+        command['message'] = None
 
     if mmode_flag:
         stop = True
@@ -379,7 +364,6 @@ while True:
         address = 0
     elif car.pos() == loc_st1:
         address = 1
-        start = False
     elif car.pos() == loc_st2:
         address = 2
     elif car.pos() == loc_st3:
@@ -390,7 +374,6 @@ while True:
         address = 5
     elif car.pos() == loc_st6:
         address = 6
-        start = False
     else:
         address = 999
 
@@ -422,10 +405,9 @@ while True:
         current_address = address
 
     pen.clear()
-    # pen.write(
-    #     "path: {}\ndirection: {}\naddress: {}\naction: {}\nstart: {}\nstop: {}\nstop{}: {}\nstop{}: {}\nstop{}: {}\nstop{}: {}\nstop{}: {}\nstop{}: {}\nstop{}: {}\ngood to go loading/unloading: {}/{}".format(
-    #         path, direction, current_address, action, start, stop, 0, stop0, 1, stop1, 2, stop2, 3, stop3, 4, stop4, 5,
-    #         stop5, 6, stop6, good_to_go_loading, good_to_go_unloading), align="center", font=("Courier", 11, "normal"))
+    pen.write(
+        "path: {}\ndirection: {}\naddress: {}\naction: {}\nstop: {}\ngood to go loading/unloading: {}/{}".format(
+            current_path, direction, current_address, action, stop, good_to_go_loading, good_to_go_unloading), align="center", font=("Courier", 11, "normal"))
 
     wn.update()
     # time.sleep(0.2)

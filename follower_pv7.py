@@ -304,7 +304,12 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
             print('obstacle: ', area)
         elif address == 0 and start and turn0:
-            turn(ccw)
+            kit.continuous_servo[0].throttle = 1
+            kit.continuous_servo[1].throttle = 1
+            time.sleep(1.2)
+            kit.continuous_servo[0].throttle = 0
+            kit.continuous_servo[1].throttle = 0
+            time.sleep(0.001)
             ccw = change_dir(ccw)
             turn0 = False
         elif address == 0 and stop0 and not start:

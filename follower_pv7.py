@@ -135,7 +135,7 @@ def turn(ccw):
             print("turn1!!")
             kit.continuous_servo[0].throttle = -1
             kit.continuous_servo[1].throttle = -1
-            time.sleep(0.9)
+            time.sleep(0.8)
         else:
             kit.continuous_servo[0].throttle = 1
             kit.continuous_servo[1].throttle = 1

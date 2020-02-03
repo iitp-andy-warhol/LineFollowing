@@ -71,7 +71,7 @@ def HQ_client():
 def follower():
     global send_status_flag, send_status_flag_lock
     global direction, current_address, action, send_status_flag, command
-    global good_to_go_loading, good_to_go_unloading, get_drive
+    global good_to_go_loading, good_to_go_unloading, get_drive, stop
 
     def change_flag(flag):
         if flag:
@@ -163,7 +163,7 @@ def follower():
                             stop = False
                             get_drive = True
                             good_to_go_loading = False
-                            print("Loading Confirm!!!")
+                            print("Loading Confirm!!!", stop)
                     else:
                         action = "unloading"
                         if good_to_go_unloading:
@@ -533,6 +533,7 @@ ccw = True
 good_to_go_loading = False
 good_to_go_unloading = False
 get_drive = False
+stop = True
 
 send_status_flag = False
 send_status_flag_lock = th.Lock()

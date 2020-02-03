@@ -125,6 +125,10 @@ def follower():
                 kit.continuous_servo[0].throttle = -1
                 kit.continuous_servo[1].throttle = -1
                 time.sleep(0.9)
+            elif address == 3:
+                kit.continuous_servo[0].throttle = 1
+                kit.continuous_servo[1].throttle = 1
+                time.sleep(1.25)
             else:
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = 1

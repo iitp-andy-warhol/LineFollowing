@@ -111,7 +111,13 @@ def follower():
 
     def turn(ccw):
         if ccw:
-            if address == 5 or address == 2:
+            if address == 0:
+                kit.continuous_servo[0].throttle = 1
+                kit.continuous_servo[1].throttle = 1
+                time.sleep(1.15)
+                kit.continuous_servo[0].throttle = 0
+                kit.continuous_servo[1].throttle = 0
+            elif address == 5 or address == 2:
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = 1
                 time.sleep(0.9)
@@ -124,7 +130,13 @@ def follower():
                 kit.continuous_servo[1].throttle = 1
                 time.sleep(1.15)
         else:
-            if address == 5:
+            if address == 0:
+                kit.continuous_servo[0].throttle = -1
+                kit.continuous_servo[1].throttle = -1
+                time.sleep(1.12)
+                kit.continuous_servo[0].throttle = 0
+                kit.continuous_servo[1].throttle = 0
+            elif address == 5:
                 kit.continuous_servo[0].throttle = -1
                 kit.continuous_servo[1].throttle = -1
                 time.sleep(0.9)
@@ -424,7 +436,6 @@ def follower():
             address4.get_stop()
             address5.get_stop()
             address6.get_stop()
-            print("after flag: ", stop)
 
         if not stop:
             action = "moving"

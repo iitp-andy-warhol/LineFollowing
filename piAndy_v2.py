@@ -133,6 +133,41 @@ def follower():
                 time.sleep(1.12)
 
 
+    class Address:
+        def __init__(self, id, msg):
+            self.id = id
+            self.msg = msg
+
+        def get_stop(self):
+            global action, stop, get_drive, good_to_go_loading, good_to_go_unloading
+            if self.id == operating_drive:
+                if self.id == address:
+                    stop = True
+                    Motor_Steer(0.4, (error * kp) + (ang * ap), True)
+                    if self.id == 0:
+                        action = "loading"
+                        if good_to_go_loading:
+                            stop = False
+                            get_drive = True
+                            good_to_go_loading = False
+                            print("Loading Confirm!!!")
+                    else:
+                        action = "unloading"
+                        if good_to_go_unloading:
+                            stop = False
+                            get_drive = True
+                            good_to_go_unloading = False
+                            print("Unloading Confirm!!!")
+
+    address0 = Address(0, False)
+    address1 = Address(1, False)
+    address2 = Address(2, False)
+    address3 = Address(3, False)
+    address4 = Address(4, False)
+    address5 = Address(5, False)
+    address6 = Address(6, False)
+
+
     # Follower
     # Make flags
     operating_drive = None
@@ -140,8 +175,6 @@ def follower():
     ccw = True
     mmode_flag = False
     stop = True
-    good_to_go_loading = False
-    good_to_go_unloading = False
 
     current_path_id = None
     current_path = None
@@ -189,41 +222,6 @@ def follower():
 
     start_time = time.time()
     counter = 0
-
-
-    class Address:
-        def __init__(self, id, msg):
-            self.id = id
-            self.msg = msg
-
-        def get_stop(self):
-            global action, stop, get_drive, good_to_go_loading, good_to_go_unloading
-            if self.id == operating_drive:
-                if self.id == address:
-                    stop = True
-                    Motor_Steer(0.4, (error * kp) + (ang * ap), True)
-                    if self.id == 0:
-                        action = "loading"
-                        if good_to_go_loading:
-                            stop = False
-                            get_drive = True
-                            good_to_go_loading = False
-                            print("Loading Confirm!!!")
-                    else:
-                        action = "unloading"
-                        if good_to_go_unloading:
-                            stop = False
-                            get_drive = True
-                            good_to_go_unloading = False
-                            print("Unloading Confirm!!!")
-
-    address0 = Address(0, False)
-    address1 = Address(1, False)
-    address2 = Address(2, False)
-    address3 = Address(3, False)
-    address4 = Address(4, False)
-    address5 = Address(5, False)
-    address6 = Address(6, False)
 
 
     # Main Loop
@@ -423,6 +421,7 @@ def follower():
 
         if not stop:
             action = "moving"
+            print("moving!!")
             Motor_Steer(0.4, (error * kp) + (ang * ap))
 
         # Send robot status

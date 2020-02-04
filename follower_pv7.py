@@ -167,6 +167,7 @@ ap = 1.0  # off angle
 # fourcc = cv2.VideoWriter_fourcc(*'DIVX')
 # out = cv2.VideoWriter(videoFile1, fourcc, 9.0, (320,240))
 address = 0
+road = 0
 address0_time = 0
 ang_list = []
 dash_memory = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -246,17 +247,17 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         ang = int(ang)
 
 # address
-        if not mmode_flag:
+        if not mmode_flag:  # to avoid false detection
             if ccw:
                 if address == 0 and ang > 40:
                     print("error: turn to ccw")
-                    turn(not ccw)
-                if address == 0 and ang < -60:
-                    address = 101
-                elif address == 101 and ang > -60:
+                    turn(ccw)
+                elif address == 0 and ang < -60:
+                    road = 101
+                elif road == 101 and ang > -60:
                     print("address: 101")
                     address = 1
-                    start = False
+                    road = 0
                 elif address == 1 and ang > -10:
                     print("address: 102")
                     address = 2
@@ -264,10 +265,11 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
                     print("address: 103")
                     address = 3
                 elif address == 3 and ang > -30:
-                    address = 34
-                elif address == 34 and ang < -65:
+                    road = 34
+                elif road == 34 and ang < -65:
                     print("address: 203")
                     address = 4
+                    road = 0
                 elif address == 4 and ang > 20:
                     print("address: 202")
                     address = 5
@@ -277,24 +279,25 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
             else:
                 if address == 0 and ang < -40:
                     print("error: turn to cw")
-                    turn(not ccw)
-                if address == 0 and ang > 60:
-                    address = 201
-                elif address == 201 and ang < 60:
+                    turn(ccw)
+                elif address == 0 and ang > 60:
+                    road = 201
+                elif road == 201 and ang < 60:
                     print("address: 201")
                     address = 6
-                    start = False
+                    road = 0
                 elif address == 6 and ang < -20:
                     print("address: 202")
                     address = 5
-                elif address == 5 and ang > 70:
+                elif address == 5 and ang > 65:
                     print("address: 203")
                     address = 4
                 elif address == 4 and ang < 35:
-                    address = 43
-                elif address == 43 and ang > 65:
+                    road = 43
+                elif road == 43 and ang > 65:
                     print("address: 103")
                     address = 3
+                    road = 0
                 elif address == 3 and ang < 10:
                     print("address: 102")
                     address = 2

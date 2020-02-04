@@ -245,6 +245,7 @@ def follower():
     address0_time = 0
     area_box = 10000.0
     ang_list = []
+    dash_memory = np.zeros((2400, 320, 3))
 
     start_time = time.time()
     counter = 0
@@ -498,6 +499,9 @@ def follower():
 
         # Ang error logger
         ang_list += [[time.time() - start_time, ang]]
+        if counter % 10 == 0:
+            dash_memory = dash_memory[0:2160]
+            dash_memory = np.vstack((image, dash_memory))
 
         # Key Binding
         key = cv2.waitKey(1) & 0xFF
@@ -511,6 +515,7 @@ def follower():
         elif key == ord("z"):
             mmode_flag = True
             print("M-mode On")
+            np.save("./dash_cam/{}.npy".format(time.time), dash_memory)
         elif key == ord("x"):
             mmode_flag = False
             print("M-mode Off")
@@ -528,6 +533,7 @@ def follower():
     print("fps = " + str(fps))
     ang_list = np.array(ang_list)
     # np.save("./ang_list_cw.npy", ang_list)
+
 
 
 # Main Thread

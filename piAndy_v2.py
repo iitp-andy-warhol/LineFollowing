@@ -194,6 +194,8 @@ def follower():
                             get_drive = True
                             good_to_go_loading = False
                             print("Loading Confirm!!!", stop)
+                        if operating_drive == 0:
+                            get_drive = True
                     else:
                         action = "unloading"
                         if good_to_go_unloading:

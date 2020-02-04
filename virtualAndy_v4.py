@@ -272,6 +272,8 @@ class Address:
                         get_drive = True
                         good_to_go_loading = False
                         print("Loading Confirm!!!")
+                    if operating_drive == 0:
+                        get_drive = True
                 else:
                     action = "unloading"
                     if good_to_go_unloading:
@@ -303,6 +305,7 @@ get_drive = True
 ccw = True
 mmode_flag = False
 stop = True
+global good_to_go_loading, good_to_go_unloading
 good_to_go_loading = False
 good_to_go_unloading = False
 
@@ -321,10 +324,12 @@ while True:
 
     if command['message'] == 'loading_complete':
         good_to_go_loading = True
+        print("get loading msg!!")
         command['message'] = None
 
     if command['message'] == 'unloading_complete':
         good_to_go_unloading = True
+        print("get unloading msg!!")
         command['message'] = None
 
     if mmode_flag:
@@ -350,6 +355,7 @@ while True:
     if get_drive:
         if path_id != current_path_id:
             current_path = list(next_path)
+            display = np.copy(list(next_path))
             current_path_id = np.copy(path_id)
         if len(current_path) > 0:
             operating_drive = current_path.pop(0)
@@ -407,7 +413,7 @@ while True:
     pen.clear()
     pen.write(
         "path: {}\ndirection: {}\naddress: {}\naction: {}\nstop: {}\ngood to go loading/unloading: {}/{}".format(
-            current_path, direction, current_address, action, stop, good_to_go_loading, good_to_go_unloading), align="center", font=("Courier", 11, "normal"))
+            display, direction, current_address, action, stop, good_to_go_loading, good_to_go_unloading), align="center", font=("Courier", 11, "normal"))
 
     wn.update()
     # time.sleep(0.2)

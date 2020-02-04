@@ -169,6 +169,8 @@ ap = 1.0  # off angle
 address = 0
 address0_time = 0
 ang_list = []
+dash_memory = np.zeros((2400, 320, 3))
+dash_block_flag = False
 stop_trigger = False
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
     counter += 1
@@ -365,6 +367,9 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     #cv2.drawContours(image, contours_blk, -1, (0,255,0), 3)
 
     ang_list += [[time.time() - start_time, ang]]
+    if counter % 10 == 0 and not dash_block_flag:
+        dash_memory = dash_memory[0:2160]
+        dash_memory = np.vstack((image, dash_memory))
             
     cv2.imshow("original with line", image)
     #print(area)
@@ -417,9 +422,13 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     elif key == ord("z"):
         mmode_flag = True
         print("M-mode On")
+        if not dash_block_flag:
+            np.save("./dash_cam/{}.npy".format(time.time), dash_memory)
+        dash_block_flag = True
     elif key == ord("x"):
         mmode_flag = False
         print("M-mode Off")
+        dash_block_flag = False
     elif key == ord("q"):
         kit.continuous_servo[0].throttle = 0
         kit.continuous_servo[1].throttle = 0

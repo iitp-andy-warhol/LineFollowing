@@ -246,6 +246,7 @@ def follower():
     area_box = 10000.0
     ang_list = []
     dash_memory = np.zeros((2400, 320, 3))
+    dash_block_flag = False
 
     start_time = time.time()
     counter = 0
@@ -515,10 +516,13 @@ def follower():
         elif key == ord("z"):
             mmode_flag = True
             print("M-mode On")
-            np.save("./dash_cam/{}.npy".format(time.time), dash_memory)
+            if not dash_block_flag:
+                np.save("./dash_cam/{}.npy".format(counter), dash_memory)
+            dash_block_flag = True
         elif key == ord("x"):
             mmode_flag = False
             print("M-mode Off")
+            dash_block_flag = False
         # Terminate process
         elif key == ord("q"):
             kit.continuous_servo[0].throttle = 0

@@ -423,7 +423,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         mmode_flag = True
         print("M-mode On")
         if not dash_block_flag:
-            np.save("./dash_cam/{}.npy".format(time.time), dash_memory)
+            np.save("./dash_cam/{}.npy".format(counter), dash_memory)
         dash_block_flag = True
     elif key == ord("x"):
         mmode_flag = False

@@ -26,11 +26,11 @@ def HQ_client():
 
 
     def send_status(sock):
-        global direction, current_address, action, send_status_flag, send_status_flag_lock
+        global direction, current_address, action, send_status_flag, send_status_flag_lock, command
         global dash_file, error_type
         current_status = None
         while True:
-            if action == "M-mode" and dash_file != None:
+            if action == "M-mode" and dash_file is not None:
                 m_mode = {
                     'direction': direction,
                     'current_address': current_address,
@@ -44,7 +44,8 @@ def HQ_client():
                 continue
 
             if send_status_flag:
-                robot_status = makeRobotStatus(direction, current_address, action)
+                ping = command['ping']
+                robot_status = makeRobotStatus(direction, current_address, action, ping)
 
                 sendData = pickle.dumps(robot_status, protocol=pickle.HIGHEST_PROTOCOL)
                 sock.send(sendData)
@@ -59,11 +60,12 @@ def HQ_client():
             else:
                 time.sleep(0.2)
 
-    def makeRobotStatus(direction, current_address, action):
+    def makeRobotStatus(direction, current_address, action, ping):
         dic = {
             'direction': direction,
             'current_address': current_address,
             'action': action,
+            'ping': ping
         }
         return dic
 
@@ -583,6 +585,7 @@ get_drive = False
 stop = True
 dash_file = None
 error_type = None
+ping = None
 
 send_status_flag = False
 send_status_flag_lock = th.Lock()

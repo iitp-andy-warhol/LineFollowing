@@ -169,7 +169,7 @@ ap = 1.0  # off angle
 address = 0
 address0_time = 0
 ang_list = []
-dash_memory = np.zeros((2400, 320, 3))
+dash_memory = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 dash_block_flag = False
 stop_trigger = False
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
@@ -368,8 +368,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
     ang_list += [[time.time() - start_time, ang]]
     if counter % 10 == 0 and not dash_block_flag:
-        dash_memory = dash_memory[0:2160]
-        dash_memory = np.vstack((image, dash_memory))
+        dash_memory.pop(0)
+        dash_memory.append(image)
             
     cv2.imshow("original with line", image)
     #print(area)

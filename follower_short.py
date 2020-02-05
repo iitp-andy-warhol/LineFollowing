@@ -365,7 +365,10 @@ def follower():
         # Image handler
         image = frame.array
         # out.write(image)
-        roi = image[60:239, 0:319]
+        if short_flag:
+            roi = image[110:239, 0:319]
+        else:
+            roi = image[60:239, 0:319]
         hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
         # yellow_lower = np.array([22, 60, 200], np.uint8)
         yellow_lower = np.array([22, 0, 150], np.uint8)
@@ -541,7 +544,7 @@ def follower():
                         if ccw:
                             kit.continuous_servo[0].throttle = 0.4
                             kit.continuous_servo[1].throttle = -1
-                        if area_box < 4000.0:
+                        if area_box < 3000.0:
                             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 1
                 elif operating_drive == 0:
@@ -553,7 +556,7 @@ def follower():
 
                     elif time.time() - short_time2 < 0.6:
                         if ccw:
-                            kit.continuous_servo[0].throttle = -0.4
+                            kit.continuous_servo[0].throttle = -0.35
                             kit.continuous_servo[1].throttle = 1
                     elif time.time() - short_time2 >= 0.6:
                         print('????')

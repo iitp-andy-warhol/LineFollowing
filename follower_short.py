@@ -89,7 +89,7 @@ def follower():
     global send_status_flag, send_status_flag_lock
     global direction, current_address, action, send_status_flag, command
     global good_to_go_loading, good_to_go_unloading, get_drive, stop
-    global dash_file, error_type
+    global dash_file, error_type, time_block
 
     def change_flag(flag):
         if flag:
@@ -505,24 +505,29 @@ def follower():
                         short_time = time.time()
                         print('new time: ', short_time)
                         time_block = True
-                    if time.time() - short_time < 0.5:
+                    elif time.time() - short_time < 0.5:
                         if ccw:
                             kit.continuous_servo[0].throttle = 1
                             kit.continuous_servo[1].throttle = -1
-                    else:
+                    elif time.time() - short_time > 0.5:
                         address = 1
                 elif operating_drive == 0:
+
                     if not time_block:
                         short_time2 = time.time()
                         print('new time: ', short_time2)
                         time_block = True
-                    if time.time() - short_time2 < 0.5:
+
+                    elif time.time() - short_time2 < 0.5:
                         if ccw:
                             kit.continuous_servo[0].throttle = -1
                             kit.continuous_servo[1].throttle = 1
-                    else:
+
+                    elif time.time() - short_time2 > 0.5:
                         print('????')
                         address = 0
+                else:
+                    print('what?')
             else:
                 action = "moving"
                 # print("moving!!")
@@ -632,6 +637,7 @@ stop = True
 dash_file = None
 error_type = None
 ping = None
+time_block = False
 
 send_status_flag = False
 send_status_flag_lock = th.Lock()

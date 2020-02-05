@@ -505,7 +505,7 @@ def follower():
                         short_time = time.time()
                         print('new time: ', short_time)
                         time_block = True
-                    if time.time() - short_time < 0.8:
+                    if time.time() - short_time < 0.5:
                         if ccw:
                             kit.continuous_servo[0].throttle = 1
                             kit.continuous_servo[1].throttle = -1
@@ -516,7 +516,7 @@ def follower():
                         short_time2 = time.time()
                         print('new time: ', short_time2)
                         time_block = True
-                    if time.time() - short_time2 < 0.8:
+                    if time.time() - short_time2 < 0.5:
                         if ccw:
                             kit.continuous_servo[0].throttle = -1
                             kit.continuous_servo[1].throttle = 1

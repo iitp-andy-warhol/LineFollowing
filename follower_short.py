@@ -224,6 +224,7 @@ def follower():
     short_flag = False
     time_block = False
     short_time = 0.1
+    short_time2 = 0.1
 
     current_path_id = None
     current_path = None
@@ -504,7 +505,7 @@ def follower():
                         short_time = time.time()
                         print('new time: ', short_time)
                         time_block = True
-                    if time.time() - short_time < 1.0:
+                    if time.time() - short_time < 0.8:
                         if ccw:
                             kit.continuous_servo[0].throttle = 1
                             kit.continuous_servo[1].throttle = -1
@@ -513,9 +514,9 @@ def follower():
                 elif operating_drive == 0:
                     if not time_block:
                         short_time = time.time()
-                        print('new time: ', short_time)
+                        print('new time: ', short_time2)
                         time_block = True
-                    if time.time() - short_time < 1.0:
+                    if time.time() - short_time2 < 0.8:
                         if ccw:
                             kit.continuous_servo[0].throttle = -1
                             kit.continuous_servo[1].throttle = 1

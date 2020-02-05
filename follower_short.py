@@ -504,8 +504,8 @@ def follower():
         if not stop:
             if short_flag:
                 action = "moving"
-                if ang < -5:
-                    ang2 = -5
+                if ang < -1:
+                    ang2 = -1
                 else:
                     ang2 = ang
                 if operating_drive == 1:
@@ -517,7 +517,7 @@ def follower():
                         if ccw:
                             Motor_Steer(0.4, (error * kp) + (ang2 * ap))
                     elif time.time() - short_time >= 0.4:
-                        if ang < - 60:
+                        if ang < - 65:
                             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
                             address = 1
                 elif operating_drive == 0:

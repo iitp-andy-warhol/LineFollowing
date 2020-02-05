@@ -508,12 +508,19 @@ def follower():
             if short_flag:
                 action = "moving"
                 if operating_drive == 1:
-                    if area_box > 1000.0:
+                    if not time_block:
+                        short_time = time.time()
+                        print('new time: ', short_time)
+                        time_block = True
+                    elif time.time() - short_time < 0.4:
                         if ccw:
                             Motor_Steer(0.4, (error * kp) + (ang * ap))
-                    elif area_box <= 1000.0:
-                        address = 1
+                    elif time.time() - short_time >= 0.4:
+                        if ang < -10:
+                            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
+                            address = 1
                 elif operating_drive == 0:
+
                     if not time_block:
                         short_time2 = time.time()
                         print('new time: ', short_time2)

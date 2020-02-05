@@ -344,10 +344,7 @@ def follower():
         # Image handler
         image = frame.array
         # out.write(image)
-        if short_flag:
-            roi = image[200:239, 0:319]
-        else:
-            roi = image[60:239, 0:319]
+        roi = image[60:239, 0:319]
         hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
         # yellow_lower = np.array([22, 60, 200], np.uint8)
         yellow_lower = np.array([22, 0, 150], np.uint8)
@@ -507,6 +504,10 @@ def follower():
         if not stop:
             if short_flag:
                 action = "moving"
+                if ang < -10:
+                    ang2 = -10
+                else:
+                    ang2 = ang
                 if operating_drive == 1:
                     if not time_block:
                         short_time = time.time()
@@ -514,9 +515,9 @@ def follower():
                         time_block = True
                     elif time.time() - short_time < 0.4:
                         if ccw:
-                            Motor_Steer(0.4, (error * kp) + (ang * ap))
+                            Motor_Steer(0.4, (error * kp) + (ang2 * ap))
                     elif time.time() - short_time >= 0.4:
-                        if ang < - 5:
+                        if ang < - 60:
                             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
                             address = 1
                 elif operating_drive == 0:

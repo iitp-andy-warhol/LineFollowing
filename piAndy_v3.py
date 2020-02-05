@@ -102,37 +102,31 @@ def follower():
         global ccw
         # servo[0] -> left, 1 -> forward
         # servo[1] -> right, -1 -> forward
-        if stop != 'shortcut':
-            if ccw:
-                param = 1.0
-            else:
-                param = 0.8
+        if ccw:
+            param = 1.0
+        else:
+            param = 0.8
 
-            if stop == True:
-                kit.continuous_servo[0].throttle = 0
-                kit.continuous_servo[1].throttle = 0
-                return
-            elif steering == 0:
-                kit.continuous_servo[0].throttle = speed
-                kit.continuous_servo[1].throttle = -1 * speed * param
-                return
-            elif steering > 0:
-                steering = 100 - steering
-                kit.continuous_servo[0].throttle = speed
-                kit.continuous_servo[1].throttle = -1 * speed * steering / 100 * param
-                return
-            elif steering < 0:
-                steering = steering * -1
-                steering = 100 - steering
-                kit.continuous_servo[0].throttle = speed * steering / 100
-                kit.continuous_servo[1].throttle = -1 * speed * param
-                return
-        elif stop == 'shortcut1':
-            if ccw:
-                start1 = time.time()
-                if time.time() - start1 < 1.0:
-                    kit.continuous_servo[0].throttle = 1
-                    kit.continuous_servo[1].throttle = -1
+        if stop == True:
+            kit.continuous_servo[0].throttle = 0
+            kit.continuous_servo[1].throttle = 0
+            return
+        elif steering == 0:
+            kit.continuous_servo[0].throttle = speed
+            kit.continuous_servo[1].throttle = -1 * speed * param
+            return
+        elif steering > 0:
+            steering = 100 - steering
+            kit.continuous_servo[0].throttle = speed
+            kit.continuous_servo[1].throttle = -1 * speed * steering / 100 * param
+            return
+        elif steering < 0:
+            steering = steering * -1
+            steering = 100 - steering
+            kit.continuous_servo[0].throttle = speed * steering / 100
+            kit.continuous_servo[1].throttle = -1 * speed * param
+            return
+
 
 
     def turn(ccw):

@@ -534,7 +534,7 @@ def follower():
                         short_time = time.time()
                         print('new time: ', short_time)
                         time_block = True
-                    elif time.time() - short_time < 0.1:
+                    elif time.time() - short_time < 0.2:
                         if ccw:
                             Motor_Steer(0.4, (error * kp) + (ang * ap))
                     elif time.time() - short_time >= 0.1:

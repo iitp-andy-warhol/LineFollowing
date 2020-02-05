@@ -345,7 +345,7 @@ def follower():
         image = frame.array
         # out.write(image)
         if short_flag:
-            roi = image[200:239, 0:319]
+            roi = image[100:239, 0:319]
         else:
             roi = image[60:239, 0:319]
         hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)

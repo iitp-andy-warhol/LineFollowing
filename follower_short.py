@@ -102,86 +102,82 @@ def follower():
         global ccw
         # servo[0] -> left, 1 -> forward
         # servo[1] -> right, -1 -> forward
-        if stop != 'shortcut':
-            if ccw:
-                param = 1.0
-            else:
-                param = 0.8
+        if ccw:
+            param = 1.0
+        else:
+            param = 0.8
 
-            if stop == True:
-                kit.continuous_servo[0].throttle = 0
-                kit.continuous_servo[1].throttle = 0
-                return
-            elif steering == 0:
-                kit.continuous_servo[0].throttle = speed
-                kit.continuous_servo[1].throttle = -1 * speed * param
-                return
-            elif steering > 0:
-                steering = 100 - steering
-                kit.continuous_servo[0].throttle = speed
-                kit.continuous_servo[1].throttle = -1 * speed * steering / 100 * param
-                return
-            elif steering < 0:
-                steering = steering * -1
-                steering = 100 - steering
-                kit.continuous_servo[0].throttle = speed * steering / 100
-                kit.continuous_servo[1].throttle = -1 * speed * param
-                return
-        elif stop == 'shortcut1':
-            if ccw:
-                start1 = time.time()
-                if time.time() - start1 < 1.0:
-                    kit.continuous_servo[0].throttle = 1
-                    kit.continuous_servo[1].throttle = -1
+        if stop == True:
+            kit.continuous_servo[0].throttle = 0
+            kit.continuous_servo[1].throttle = 0
+            return
+        elif steering == 0:
+            kit.continuous_servo[0].throttle = speed
+            kit.continuous_servo[1].throttle = -1 * speed * param
+            return
+        elif steering > 0:
+            steering = 100 - steering
+            kit.continuous_servo[0].throttle = speed
+            kit.continuous_servo[1].throttle = -1 * speed * steering / 100 * param
+            return
+        elif steering < 0:
+            steering = steering * -1
+            steering = 100 - steering
+            kit.continuous_servo[0].throttle = speed * steering / 100
+            kit.continuous_servo[1].throttle = -1 * speed * param
+            return
 
 
     def turn(ccw):
-        if ccw:
-            if address == 0:
-                kit.continuous_servo[0].throttle = 1
-                kit.continuous_servo[1].throttle = 1
-                time.sleep(1.15)
-                kit.continuous_servo[0].throttle = 0
-                kit.continuous_servo[1].throttle = 0
-            elif address == 5 or address == 2:
-                kit.continuous_servo[0].throttle = 1
-                kit.continuous_servo[1].throttle = 1
-                time.sleep(0.9)
-            elif address == 1:
-                kit.continuous_servo[0].throttle = -1
-                kit.continuous_servo[1].throttle = -1
-                time.sleep(0.9)
-            elif address == 3:
-                kit.continuous_servo[0].throttle = 1
-                kit.continuous_servo[1].throttle = 1
-                time.sleep(1.25)
-            else:
-                kit.continuous_servo[0].throttle = 1
-                kit.continuous_servo[1].throttle = 1
-                time.sleep(1.15)
+        if short_flag:
+            pass
         else:
-            if address == 0:
-                kit.continuous_servo[0].throttle = -1
-                kit.continuous_servo[1].throttle = -1
-                time.sleep(1.12)
-                kit.continuous_servo[0].throttle = 0
-                kit.continuous_servo[1].throttle = 0
-            elif address == 4:
-                kit.continuous_servo[0].throttle = -1
-                kit.continuous_servo[1].throttle = -1
-                time.sleep(1.2)
-            elif address == 5:
-                kit.continuous_servo[0].throttle = -1
-                kit.continuous_servo[1].throttle = -1
-                time.sleep(0.9)
-            elif address == 6:
-                kit.continuous_servo[0].throttle = -1
-                kit.continuous_servo[1].throttle = -1
-                time.sleep(1.3)
+            if ccw:
+                if address == 0:
+                    kit.continuous_servo[0].throttle = 1
+                    kit.continuous_servo[1].throttle = 1
+                    time.sleep(1.15)
+                    kit.continuous_servo[0].throttle = 0
+                    kit.continuous_servo[1].throttle = 0
+                elif address == 5 or address == 2:
+                    kit.continuous_servo[0].throttle = 1
+                    kit.continuous_servo[1].throttle = 1
+                    time.sleep(0.9)
+                elif address == 1:
+                    kit.continuous_servo[0].throttle = -1
+                    kit.continuous_servo[1].throttle = -1
+                    time.sleep(0.9)
+                elif address == 3:
+                    kit.continuous_servo[0].throttle = 1
+                    kit.continuous_servo[1].throttle = 1
+                    time.sleep(1.25)
+                else:
+                    kit.continuous_servo[0].throttle = 1
+                    kit.continuous_servo[1].throttle = 1
+                    time.sleep(1.15)
             else:
-                kit.continuous_servo[0].throttle = -1
-                kit.continuous_servo[1].throttle = -1
-                time.sleep(1.12)
+                if address == 0:
+                    kit.continuous_servo[0].throttle = -1
+                    kit.continuous_servo[1].throttle = -1
+                    time.sleep(1.12)
+                    kit.continuous_servo[0].throttle = 0
+                    kit.continuous_servo[1].throttle = 0
+                elif address == 4:
+                    kit.continuous_servo[0].throttle = -1
+                    kit.continuous_servo[1].throttle = -1
+                    time.sleep(1.2)
+                elif address == 5:
+                    kit.continuous_servo[0].throttle = -1
+                    kit.continuous_servo[1].throttle = -1
+                    time.sleep(0.9)
+                elif address == 6:
+                    kit.continuous_servo[0].throttle = -1
+                    kit.continuous_servo[1].throttle = -1
+                    time.sleep(1.3)
+                else:
+                    kit.continuous_servo[0].throttle = -1
+                    kit.continuous_servo[1].throttle = -1
+                    time.sleep(1.12)
 
 
     class Address:
@@ -309,8 +305,6 @@ def follower():
             print('obstacle ahead: ', area_box)
             action = 'obstacle'
             stop = True
-        elif short_flag:
-            Motor_Steer(0.4, (error * kp) + (ang * ap), 'shortcut')
         else:
             stop = False
 
@@ -329,6 +323,7 @@ def follower():
         if get_drive:
             if path_id != current_path_id:
                 current_path = list(next_path)
+                display = np.copy(list(next_path))
                 current_path_id = np.copy(path_id)
             if len(current_path) > 0:
                 operating_drive = current_path.pop(0)
@@ -496,9 +491,28 @@ def follower():
             address6.get_stop()
 
         if not stop:
-            action = "moving"
-            # print("moving!!")
-            Motor_Steer(0.4, (error * kp) + (ang * ap))
+            if short_flag:
+                action = "moving"
+                if operating_drive == 1:
+                    start = time.time()
+                    if time.time() - start < 0.5:
+                        if ccw:
+                            kit.continuous_servo[0].throttle = 1
+                            kit.continuous_servo[1].throttle = -1
+                    else:
+                        address = 1
+                elif operating_drive == 0:
+                    start = time.time()
+                    if time.time() - start < 0.5:
+                        if ccw:
+                            kit.continuous_servo[0].throttle = -1
+                            kit.continuous_servo[1].throttle = 1
+                    else:
+                        address = 0
+            else:
+                action = "moving"
+                # print("moving!!")
+                Motor_Steer(0.4, (error * kp) + (ang * ap))
 
         # Send robot status
         if counter % 5 == 0:

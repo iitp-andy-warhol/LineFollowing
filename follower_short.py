@@ -186,7 +186,7 @@ def follower():
             self.msg = msg
 
         def get_stop(self):
-            global action, stop, get_drive, good_to_go_loading, good_to_go_unloading
+            global action, stop, get_drive, good_to_go_loading, good_to_go_unloading, time_block
             if self.id == operating_drive:
                 if self.id == address:
                     stop = True
@@ -197,6 +197,7 @@ def follower():
                             stop = False
                             get_drive = True
                             good_to_go_loading = False
+                            time_block = False
                             print("Loading Confirm!!!", stop)
                     else:
                         action = "unloading"
@@ -204,6 +205,7 @@ def follower():
                             stop = False
                             get_drive = True
                             good_to_go_unloading = False
+                            time_block = False
                             print("Unloading Confirm!!!")
 
     address0 = Address(0, False)
@@ -223,6 +225,8 @@ def follower():
     mmode_flag = False
     stop = True
     short_flag = False
+    time_block = False
+    short_time = 0.1
 
     current_path_id = None
     current_path = None
@@ -494,16 +498,20 @@ def follower():
             if short_flag:
                 action = "moving"
                 if operating_drive == 1:
-                    start = time.time()
-                    if time.time() - start < 0.5:
+                    if not time_block:
+                        short_time = time.time()
+                        time_block = True
+                    if time.time() - short_time < 0.5:
                         if ccw:
                             kit.continuous_servo[0].throttle = 1
                             kit.continuous_servo[1].throttle = -1
                     else:
                         address = 1
                 elif operating_drive == 0:
-                    start = time.time()
-                    if time.time() - start < 0.5:
+                    if not time_block:
+                        short_time = time.time()
+                        time_block = True
+                    if time.time() - short_time < 0.5:
                         if ccw:
                             kit.continuous_servo[0].throttle = -1
                             kit.continuous_servo[1].throttle = 1

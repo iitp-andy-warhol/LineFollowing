@@ -517,7 +517,7 @@ def follower():
                         if ccw:
                             Motor_Steer(0.4, (error * kp) + (ang2 * ap))
                     elif time.time() - short_time >= 0.4:
-                        if ang < - 70:
+                        if ang < - 60:
                             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
                             address = 1
                 elif operating_drive == 0:

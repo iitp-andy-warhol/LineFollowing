@@ -594,7 +594,8 @@ operating_order = {'address': 0, 'id':99999}
 command = {
     'message': None,  # loading_complete / unloading_complete / None
     'path': (0,),  # path / None
-    'path_id': 9999  # to ignore same path
+    'path_id': 9999,  # to ignore same path
+    'ping' : 0
 }
 
 ccw = True

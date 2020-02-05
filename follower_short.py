@@ -532,37 +532,67 @@ def follower():
                 #     ang2 = -1
                 # else:
                 #     ang2 = ang
-                if operating_drive == 1:
+                if operating_drive == 2:
                     if not time_block:
+                        time_block = True
+                        kit.continuous_servo[0].throttle = -1
+                        kit.continuous_servo[1].throttle = -1
+                        time.sleep(0.3)
                         short_time = time.time()
                         print('new time: ', short_time)
-                        time_block = True
-                    elif time.time() - short_time < 0.2:
-                        if ccw:
-                            Motor_Steer(0.4, (error * kp) + (ang * ap))
-                    elif time.time() - short_time >= 0.2:
+                    elif time.time() - short_time < 1.0:
                         if ccw:
                             kit.continuous_servo[0].throttle = 0.4
                             kit.continuous_servo[1].throttle = -1
-                        if area_box < 3500.0:
-                            Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
-                            address = 1
+                    elif time.time() - short_time >= 1.0:
+                        Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
+                        address = 2
                 elif operating_drive == 0:
-
                     if not time_block:
                         short_time2 = time.time()
                         print('new time: ', short_time2)
                         time_block = True
 
-                    elif time.time() - short_time2 < 0.7:
+                    elif time.time() - short_time2 < 1.0:
                         if ccw:
-                            kit.continuous_servo[0].throttle = -0.35
+                            kit.continuous_servo[0].throttle = -0.4
                             kit.continuous_servo[1].throttle = 1
-                    elif time.time() - short_time2 >= 0.7:
+                    elif time.time() - short_time2 >= 1.0:
                         print('????')
                         address = 0
                 else:
                     print('what?')
+                # if operating_drive == 1:
+                #     if not time_block:
+                #         short_time = time.time()
+                #         print('new time: ', short_time)
+                #         time_block = True
+                #     elif time.time() - short_time < 0.2:
+                #         if ccw:
+                #             Motor_Steer(0.4, (error * kp) + (ang * ap))
+                #     elif time.time() - short_time >= 0.2:
+                #         if ccw:
+                #             kit.continuous_servo[0].throttle = 0.4
+                #             kit.continuous_servo[1].throttle = -1
+                #         if area_box < 3800.0:
+                #             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
+                #             address = 1
+                # elif operating_drive == 0:
+                #
+                #     if not time_block:
+                #         short_time2 = time.time()
+                #         print('new time: ', short_time2)
+                #         time_block = True
+                #
+                #     elif time.time() - short_time2 < 0.7:
+                #         if ccw:
+                #             kit.continuous_servo[0].throttle = -0.33
+                #             kit.continuous_servo[1].throttle = 1
+                #     elif time.time() - short_time2 >= 0.7:
+                #         print('????')
+                #         address = 0
+                # else:
+                #     print('what?')
             else:
                 action = "moving"
                 # print("moving!!")

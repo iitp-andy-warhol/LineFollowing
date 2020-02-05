@@ -513,7 +513,7 @@ def follower():
                         address = 1
                 elif operating_drive == 0:
                     if not time_block:
-                        short_time = time.time()
+                        short_time2 = time.time()
                         print('new time: ', short_time2)
                         time_block = True
                     if time.time() - short_time2 < 0.8:
@@ -521,6 +521,7 @@ def follower():
                             kit.continuous_servo[0].throttle = -1
                             kit.continuous_servo[1].throttle = 1
                     else:
+                        print('????')
                         address = 0
             else:
                 action = "moving"

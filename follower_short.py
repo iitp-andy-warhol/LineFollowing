@@ -537,11 +537,11 @@ def follower():
                     elif time.time() - short_time < 0.2:
                         if ccw:
                             Motor_Steer(0.4, (error * kp) + (ang * ap))
-                    elif time.time() - short_time >= 0.1:
+                    elif time.time() - short_time >= 0.2:
                         if ccw:
                             kit.continuous_servo[0].throttle = 1
                             kit.continuous_servo[1].throttle = -1
-                        if area_box < 3000.0:
+                        if area_box < 4000.0:
                             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 1
                 elif operating_drive == 0:
@@ -551,11 +551,11 @@ def follower():
                         print('new time: ', short_time2)
                         time_block = True
 
-                    elif time.time() - short_time2 < 0.5:
+                    elif time.time() - short_time2 < 0.6:
                         if ccw:
                             kit.continuous_servo[0].throttle = -1
                             kit.continuous_servo[1].throttle = 1
-                    elif time.time() - short_time2 > 0.5:
+                    elif time.time() - short_time2 >= 0.6:
                         print('????')
                         address = 0
                 else:

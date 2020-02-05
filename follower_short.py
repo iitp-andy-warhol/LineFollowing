@@ -340,7 +340,7 @@ def follower():
         # Image handler
         image = frame.array
         # out.write(image)
-        roi = image[60:239, 0:319]
+        roi = image[150:239, 0:319]
         hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
         # yellow_lower = np.array([22, 60, 200], np.uint8)
         yellow_lower = np.array([22, 0, 150], np.uint8)

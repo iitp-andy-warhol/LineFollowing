@@ -98,7 +98,7 @@ def follower():
             flag = True
         return flag
 
-    def Motor_Steer(speed, steering, stop=False):
+    def Motor_Steer(speed, steering, stop=False, back=False):
         global ccw
         # servo[0] -> left, 1 -> forward
         # servo[1] -> right, -1 -> forward
@@ -107,25 +107,46 @@ def follower():
         else:
             param = 0.8
 
-        if stop == True:
-            kit.continuous_servo[0].throttle = 0
-            kit.continuous_servo[1].throttle = 0
-            return
-        elif steering == 0:
-            kit.continuous_servo[0].throttle = speed
-            kit.continuous_servo[1].throttle = -1 * speed * param
-            return
-        elif steering > 0:
-            steering = 100 - steering
-            kit.continuous_servo[0].throttle = speed
-            kit.continuous_servo[1].throttle = -1 * speed * steering / 100 * param
-            return
-        elif steering < 0:
-            steering = steering * -1
-            steering = 100 - steering
-            kit.continuous_servo[0].throttle = speed * steering / 100
-            kit.continuous_servo[1].throttle = -1 * speed * param
-            return
+        if back:
+            if stop == True:
+                kit.continuous_servo[0].throttle = 0
+                kit.continuous_servo[1].throttle = 0
+                return
+            elif steering == 0:
+                kit.continuous_servo[0].throttle = -1 *speed
+                kit.continuous_servo[1].throttle = speed
+                return
+            elif steering > 0:
+                steering = 100 - steering
+                kit.continuous_servo[0].throttle = -1 * speed * steering / 100
+                kit.continuous_servo[1].throttle = speed
+                return
+            elif steering < 0:
+                steering = steering * -1
+                steering = 100 - steering
+                kit.continuous_servo[0].throttle = -1 * speed
+                kit.continuous_servo[1].throttle = speed * steering / 100
+                return
+        else:
+            if stop == True:
+                kit.continuous_servo[0].throttle = 0
+                kit.continuous_servo[1].throttle = 0
+                return
+            elif steering == 0:
+                kit.continuous_servo[0].throttle = speed
+                kit.continuous_servo[1].throttle = -1 * speed * param
+                return
+            elif steering > 0:
+                steering = 100 - steering
+                kit.continuous_servo[0].throttle = speed
+                kit.continuous_servo[1].throttle = -1 * speed * steering / 100 * param
+                return
+            elif steering < 0:
+                steering = steering * -1
+                steering = 100 - steering
+                kit.continuous_servo[0].throttle = speed * steering / 100
+                kit.continuous_servo[1].throttle = -1 * speed * param
+                return
 
 
     def turn(ccw):
@@ -187,7 +208,7 @@ def follower():
             if self.id == operating_drive:
                 if self.id == address:
                     stop = True
-                    Motor_Steer(0.4, (error * kp) + (ang * ap), True)
+                    Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
                     if self.id == 0:
                         action = "loading"
                         if good_to_go_loading:
@@ -301,14 +322,14 @@ def follower():
 
         if mmode_flag: # M-mode handler
             action = "M-mode"
-            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
+            Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
             stop = True
         elif short_flag:
             if area_box < 2000.0:  # obstacle handler
                 print('obstacle ahead: ', area_box)
         elif not short_flag:
             if area_box < 5000.0:  # obstacle handler
-                Motor_Steer(0.4, (error * kp) + (ang * ap), True)
+                Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
                 print('obstacle ahead: ', area_box)
                 action = 'obstacle'
                 stop = True
@@ -344,7 +365,10 @@ def follower():
         # Image handler
         image = frame.array
         # out.write(image)
-        roi = image[60:239, 0:319]
+        if short_flag:
+            roi = image[190:239, 0:319]
+        else:
+            roi = image[60:239, 0:319]
         hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
         # yellow_lower = np.array([22, 60, 200], np.uint8)
         yellow_lower = np.array([22, 0, 150], np.uint8)
@@ -504,21 +528,21 @@ def follower():
         if not stop:
             if short_flag:
                 action = "moving"
-                if ang < -1:
-                    ang2 = -1
-                else:
-                    ang2 = ang
+                # if ang < -1:
+                #     ang2 = -1
+                # else:
+                #     ang2 = ang
                 if operating_drive == 1:
                     if not time_block:
                         short_time = time.time()
                         print('new time: ', short_time)
                         time_block = True
-                    elif time.time() - short_time < 0.4:
+                    elif time.time() - short_time < 0.3:
                         if ccw:
-                            Motor_Steer(0.4, (error * kp) + (ang2 * ap))
-                    elif time.time() - short_time >= 0.4:
-                        if ang < - 65:
-                            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
+                            Motor_Steer(0.4, (error * kp) + (ang * ap))
+                    elif time.time() - short_time >= 0.3:
+                        if ang < - 7:
+                            Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 1
                 elif operating_drive == 0:
 
@@ -529,8 +553,7 @@ def follower():
 
                     elif time.time() - short_time2 < 0.5:
                         if ccw:
-                            kit.continuous_servo[0].throttle = -1
-                            kit.continuous_servo[1].throttle = 1
+                            Motor_Steer(0.4, (error * kp) + (ang * ap), back=True)
 
                     elif time.time() - short_time2 > 0.5:
                         print('????')

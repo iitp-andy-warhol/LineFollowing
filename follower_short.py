@@ -345,7 +345,7 @@ def follower():
         image = frame.array
         # out.write(image)
         if short_flag:
-            roi = image[100:239, 0:319]
+            roi = image[190:239, 0:319]
         else:
             roi = image[60:239, 0:319]
         hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
@@ -516,7 +516,7 @@ def follower():
                         if ccw:
                             Motor_Steer(0.4, (error * kp) + (ang * ap))
                     elif time.time() - short_time >= 0.4:
-                        if ang < -10:
+                        if ang < -5:
                             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
                             address = 1
                 elif operating_drive == 0:

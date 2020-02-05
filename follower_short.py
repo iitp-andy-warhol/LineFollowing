@@ -303,11 +303,15 @@ def follower():
             action = "M-mode"
             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
             stop = True
-        elif area_box < 5000.0:  # obstacle handler
-            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
-            print('obstacle ahead: ', area_box)
-            action = 'obstacle'
-            stop = True
+        elif short_flag:
+            if area_box < 3000.0:  # obstacle handler
+                print('obstacle ahead: ', area_box)
+        elif not short_flag:
+            if area_box < 5000.0:  # obstacle handler
+                Motor_Steer(0.4, (error * kp) + (ang * ap), True)
+                print('obstacle ahead: ', area_box)
+                action = 'obstacle'
+                stop = True
         else:
             stop = False
 

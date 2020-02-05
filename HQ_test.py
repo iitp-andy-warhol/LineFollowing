@@ -7,7 +7,7 @@ import robotstatus as rs
 from datetime import datetime
 
 
-mid_ip = 'localhost'
+mid_ip = '128.237.200.50'
 
 
 def send_robot_status(client):

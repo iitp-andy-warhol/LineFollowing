@@ -541,7 +541,7 @@ def follower():
                         if ccw:
                             kit.continuous_servo[0].throttle = 1
                             kit.continuous_servo[1].throttle = -1
-                        if ang < - 70:
+                        if area_box < 3000.0:
                             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 1
                 elif operating_drive == 0:

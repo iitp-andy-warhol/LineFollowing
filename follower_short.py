@@ -129,55 +129,52 @@ def follower():
 
 
     def turn(ccw):
-        if short_flag:
-            pass
-        else:
-            if ccw:
-                if address == 0:
-                    kit.continuous_servo[0].throttle = 1
-                    kit.continuous_servo[1].throttle = 1
-                    time.sleep(1.15)
-                    kit.continuous_servo[0].throttle = 0
-                    kit.continuous_servo[1].throttle = 0
-                elif address == 5 or address == 2:
-                    kit.continuous_servo[0].throttle = 1
-                    kit.continuous_servo[1].throttle = 1
-                    time.sleep(0.9)
-                elif address == 1:
-                    kit.continuous_servo[0].throttle = -1
-                    kit.continuous_servo[1].throttle = -1
-                    time.sleep(0.9)
-                elif address == 3:
-                    kit.continuous_servo[0].throttle = 1
-                    kit.continuous_servo[1].throttle = 1
-                    time.sleep(1.25)
-                else:
-                    kit.continuous_servo[0].throttle = 1
-                    kit.continuous_servo[1].throttle = 1
-                    time.sleep(1.15)
+        if ccw:
+            if address == 0:
+                kit.continuous_servo[0].throttle = 1
+                kit.continuous_servo[1].throttle = 1
+                time.sleep(1.15)
+                kit.continuous_servo[0].throttle = 0
+                kit.continuous_servo[1].throttle = 0
+            elif address == 5 or address == 2:
+                kit.continuous_servo[0].throttle = 1
+                kit.continuous_servo[1].throttle = 1
+                time.sleep(0.9)
+            elif address == 1:
+                kit.continuous_servo[0].throttle = -1
+                kit.continuous_servo[1].throttle = -1
+                time.sleep(0.9)
+            elif address == 3:
+                kit.continuous_servo[0].throttle = 1
+                kit.continuous_servo[1].throttle = 1
+                time.sleep(1.25)
             else:
-                if address == 0:
-                    kit.continuous_servo[0].throttle = -1
-                    kit.continuous_servo[1].throttle = -1
-                    time.sleep(1.12)
-                    kit.continuous_servo[0].throttle = 0
-                    kit.continuous_servo[1].throttle = 0
-                elif address == 4:
-                    kit.continuous_servo[0].throttle = -1
-                    kit.continuous_servo[1].throttle = -1
-                    time.sleep(1.2)
-                elif address == 5:
-                    kit.continuous_servo[0].throttle = -1
-                    kit.continuous_servo[1].throttle = -1
-                    time.sleep(0.9)
-                elif address == 6:
-                    kit.continuous_servo[0].throttle = -1
-                    kit.continuous_servo[1].throttle = -1
-                    time.sleep(1.3)
-                else:
-                    kit.continuous_servo[0].throttle = -1
-                    kit.continuous_servo[1].throttle = -1
-                    time.sleep(1.12)
+                kit.continuous_servo[0].throttle = 1
+                kit.continuous_servo[1].throttle = 1
+                time.sleep(1.15)
+        else:
+            if address == 0:
+                kit.continuous_servo[0].throttle = -1
+                kit.continuous_servo[1].throttle = -1
+                time.sleep(1.12)
+                kit.continuous_servo[0].throttle = 0
+                kit.continuous_servo[1].throttle = 0
+            elif address == 4:
+                kit.continuous_servo[0].throttle = -1
+                kit.continuous_servo[1].throttle = -1
+                time.sleep(1.2)
+            elif address == 5:
+                kit.continuous_servo[0].throttle = -1
+                kit.continuous_servo[1].throttle = -1
+                time.sleep(0.9)
+            elif address == 6:
+                kit.continuous_servo[0].throttle = -1
+                kit.continuous_servo[1].throttle = -1
+                time.sleep(1.3)
+            else:
+                kit.continuous_servo[0].throttle = -1
+                kit.continuous_servo[1].throttle = -1
+                time.sleep(1.12)
 
 
     class Address:
@@ -481,10 +478,14 @@ def follower():
 
         # Stop handler
         if operating_drive == 9:
-            print("turn!")
-            turn(ccw)
-            ccw = change_flag(ccw)
-            get_drive = True
+            if short_flag:
+                print("short, no turn!")
+                get_drive = True
+            else:
+                print("turn!")
+                turn(ccw)
+                ccw = change_flag(ccw)
+                get_drive = True
         else:
             address0.get_stop()
             address1.get_stop()
@@ -501,7 +502,7 @@ def follower():
                     if not time_block:
                         short_time = time.time()
                         time_block = True
-                    if time.time() - short_time < 0.5:
+                    if time.time() - short_time < 1.0:
                         if ccw:
                             kit.continuous_servo[0].throttle = 1
                             kit.continuous_servo[1].throttle = -1
@@ -511,7 +512,7 @@ def follower():
                     if not time_block:
                         short_time = time.time()
                         time_block = True
-                    if time.time() - short_time < 0.5:
+                    if time.time() - short_time < 1.0:
                         if ccw:
                             kit.continuous_servo[0].throttle = -1
                             kit.continuous_servo[1].throttle = 1

@@ -252,6 +252,7 @@ def follower():
     short_time2 = 0.1
     short_direction = 0
     display = []
+    stop_block = False
 
     current_path_id = None
     current_path = None
@@ -505,7 +506,7 @@ def follower():
                     address = 1
 
         # Stop sign handler
-        if not mmode_flag:
+        if not mmode_flag and not stop_block:
             if len(contours_red) > 0:
                 print("stopsign: ", time.time() - start_time)
                 stop_trigger = True
@@ -556,6 +557,7 @@ def follower():
                                 Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                                 address = 1
                     elif not ccw:
+                        stop_block = True
                         if time.time() - short_time < 0.4:
                             kit.continuous_servo[0].throttle = -0.4
                             kit.continuous_servo[1].throttle = 1
@@ -575,6 +577,7 @@ def follower():
                         elif time.time() - short_time2 >= 0.7:
                             address = 0
                     elif not ccw:
+                        stop_block = False
                         Motor_Steer(-0.4, (error * kp) + (ang * ap))
 
                 else:

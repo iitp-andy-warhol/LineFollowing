@@ -335,7 +335,8 @@ def follower():
             stop = True
         elif short_flag:
             # if area_box < 2000.0:  # obstacle handler
-            print('obstacle ahead: ', area_box)
+            # print('obstacle ahead: ', area_box)
+            pass
         elif not short_flag:
             if area_box < 5000.0:  # obstacle handler
                 Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
@@ -377,7 +378,7 @@ def follower():
             if short_direction == 2:
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = -0.1
-                time.sleep(0.7)
+                time.sleep(0.75)
                 kit.continuous_servo[0].throttle = 0
                 kit.continuous_servo[1].throttle = 0
                 short_direction = 1
@@ -387,7 +388,7 @@ def follower():
             if short_direction == 5:
                 kit.continuous_servo[0].throttle = 0.1
                 kit.continuous_servo[1].throttle = -1
-                time.sleep(0.7)
+                time.sleep(0.75)
                 kit.continuous_servo[0].throttle = 0
                 kit.continuous_servo[1].throttle = 0
                 short_direction = 6
@@ -403,13 +404,13 @@ def follower():
             if short_direction == 2:
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = -0.1
-                time.sleep(0.7)
+                time.sleep(0.75)
                 kit.continuous_servo[0].throttle = 0
                 kit.continuous_servo[1].throttle = 0
             elif short_direction == 5:
                 kit.continuous_servo[0].throttle = 0.1
                 kit.continuous_servo[1].throttle = -1
-                time.sleep(0.7)
+                time.sleep(0.75)
                 kit.continuous_servo[0].throttle = 0
                 kit.continuous_servo[1].throttle = 0
             short_direction = 9
@@ -589,10 +590,10 @@ def follower():
                             time_block = True
                         elif not ccw:
                             stop_block = True
-                            if time.time() - short_time < 0.65:
+                            if time.time() - short_time < 0.7:
                                 kit.continuous_servo[0].throttle = -0.4
                                 kit.continuous_servo[1].throttle = 1
-                            elif time.time() - short_time >= 0.65:
+                            elif time.time() - short_time >= 0.7:
                                 Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
                                 address = 1
                         elif ccw:
@@ -622,10 +623,10 @@ def follower():
                             time_block = True
                         elif ccw:
                             stop_block = True
-                            if time.time() - short_time < 0.65:
+                            if time.time() - short_time < 0.7:
                                 kit.continuous_servo[0].throttle = -0.4
                                 kit.continuous_servo[1].throttle = 1
-                            elif time.time() - short_time >= 0.65:
+                            elif time.time() - short_time >= 0.7:
                                 Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
                                 address = 6
                         elif not ccw:

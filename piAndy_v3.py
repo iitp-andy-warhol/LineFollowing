@@ -557,8 +557,8 @@ def follower():
                                 address = 1
                     elif not ccw:
                         if time.time() - short_time < 0.3:
-                            kit.continuous_servo[0].throttle = 0.4
-                            kit.continuous_servo[1].throttle = -1
+                            kit.continuous_servo[0].throttle = -0.4
+                            kit.continuous_servo[1].throttle = 1
                         elif time.time() - short_time >= 0.3:
                             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 1

@@ -19,7 +19,7 @@ def send_robot_status(client):
     error_type = None
     dash_file_name = None
     while True:
-        recvData = client.recv(8192)
+        recvData = client.recv(16384)
         raw_status = pickle.loads(recvData)
 
         if raw_status['action'] == 'dash_file':

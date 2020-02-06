@@ -537,7 +537,7 @@ def follower():
                     if short_direction == 9:
                         kit.continuous_servo[0].throttle = -1
                         kit.continuous_servo[1].throttle = -1
-                        time.sleep(0.33)
+                        time.sleep(0.31)
                         short_direction = 2
                     if not time_block:
                         time_block = True

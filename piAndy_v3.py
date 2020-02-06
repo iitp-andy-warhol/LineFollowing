@@ -371,8 +371,6 @@ def follower():
         if list(display) == [1, 9, 0]:
             short_flag = True
         elif list(display) == [9, 1, 9, 0]:
-            turn(ccw)
-            change_flag(ccw)
             short_flag = True
         else:
             short_flag = False
@@ -558,10 +556,10 @@ def follower():
                                 Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                                 address = 1
                     elif not ccw:
-                        if time.time() - short_time < 0.5:
+                        if time.time() - short_time < 0.4:
                             kit.continuous_servo[0].throttle = -0.4
                             kit.continuous_servo[1].throttle = 1
-                        elif time.time() - short_time >= 0.5:
+                        elif time.time() - short_time >= 0.4:
                             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 1
 

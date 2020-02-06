@@ -247,7 +247,7 @@ def follower():
     short_time = 0.1
     short_time2 = 0.1
     short_direction = 0
-    display = None
+    display = []
 
     current_path_id = None
     current_path = None

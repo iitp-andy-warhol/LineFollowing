@@ -27,20 +27,20 @@ def HQ_client():
 
     def send_status(sock):
         global direction, current_address, action, send_status_flag, send_status_flag_lock, command
-        global dash_file, error_type
+        global dash_file_name, error_type
         current_status = None
         while True:
-            if action == "M-mode" and dash_file is not None:
+            if action == "M-mode" and dash_file_name is not None:
                 m_mode = {
                     'direction': direction,
                     'current_address': current_address,
-                    'action': 'dash_file',
+                    'action': 'dash_file_name',
                     'error_type': error_type,
-                    'dash_file': dash_file
+                    'dash_file_name': dash_file_name
                 }
                 sendData = pickle.dumps(m_mode, protocol=pickle.HIGHEST_PROTOCOL)
                 sock.send(sendData)
-                dash_file = None
+                dash_file_name = None
                 continue
 
             if send_status_flag:
@@ -89,7 +89,7 @@ def follower():
     global send_status_flag, send_status_flag_lock
     global direction, current_address, action, send_status_flag, command
     global good_to_go_loading, good_to_go_unloading, get_drive, stop
-    global dash_file, error_type
+    global dash_file_name, error_type
 
     def change_flag(flag):
         if flag:
@@ -538,9 +538,9 @@ def follower():
             if not dash_block_flag:
                 # now = datetime.now()
                 # mmode_start = now.strftime("%Y-%m-%d %H:%M:%S")
-                dash_file = np.copy(dash_memory)
                 error_type = 'manual'
                 np.save("./dash_cam/{}.npy".format(counter), dash_memory)
+                dash_file_name = "{}.npy".format(counter)
             dash_block_flag = True
         elif key == ord("x"):
             mmode_flag = False
@@ -584,7 +584,7 @@ good_to_go_loading = False
 good_to_go_unloading = False
 get_drive = False
 stop = True
-dash_file = None
+dash_file_name = None
 error_type = None
 ping = None
 

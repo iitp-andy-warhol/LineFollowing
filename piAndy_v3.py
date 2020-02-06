@@ -253,7 +253,6 @@ def follower():
     short_flag = False
     time_block = False
     short_time = 0.1
-    short_time2 = 0.1
     display = []
     stop_block = False
     short_direction = 0
@@ -306,8 +305,6 @@ def follower():
     dash_memory = np.zeros((2400, 320, 3))
     dash_block_flag = False
 
-    short_time = time.time()
-    # start_time2 = time.time()
     counter = 0
 
 
@@ -394,10 +391,10 @@ def follower():
         # Image handler
         image = frame.array
         # out.write(image)
-        if short_flag:
-            roi = image[110:239, 0:319]
-        else:
-            roi = image[60:239, 0:319]
+        # if short_flag:
+        #     roi = image[110:239, 0:319]
+        # else:
+        roi = image[60:239, 0:319]
         hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
         # yellow_lower = np.array([22, 60, 200], np.uint8)
         yellow_lower = np.array([22, 0, 150], np.uint8)
@@ -576,13 +573,13 @@ def follower():
                             short_flag = False
                     elif operating_drive == 0:
                         if not time_block:
-                            short_time2 = time.time()
-                            print('new time: ', short_time2)
+                            short_time = time.time()
+                            print('new time: ', short_time)
                             time_block = True
                         elif not ccw:
-                            if time.time() - short_time2 < 0.2:
+                            if time.time() - short_time < 0.2:
                                 Motor_Steer(0.4, (error * kp) + (ang * ap))
-                            elif time.time() - short_time2 >= 0.2:
+                            elif time.time() - short_time >= 0.2:
                                 stop_block = False
                                 short_direction = 1
                                 Motor_Steer(0.4, (error * kp) + (ang * ap))
@@ -607,53 +604,57 @@ def follower():
                                 address = 6
                         elif not ccw:
                             short_flag = False
+                            continue
                     elif operating_drive == 0:
                         if not time_block:
-                            short_time2 = time.time()
-                            print('new time: ', short_time2)
+                            short_time = time.time()
+                            print('new time: ', short_time)
                             time_block = True
                         elif ccw:
-                            if time.time() - short_time2 < 0.2:
+                            if time.time() - short_time < 0.2:
                                 Motor_Steer(0.4, (error * kp) + (ang * ap))
-                            elif time.time() - short_time2 >= 0.2:
+                            elif time.time() - short_time >= 0.2:
                                 stop_block = False
                                 short_direction = 6
                                 Motor_Steer(0.4, (error * kp) + (ang * ap))
                         elif not ccw:
                             short_flag = False
+                            continue
                     else:
                         print('what?')
 
                 elif short_case == 2:
                     if operating_drive == 2:
-                        if short_direction == 9 or short_direction == 1:
-                            kit.continuous_servo[0].throttle = 0.1
+                        if ccw:
+                            short_flag = True
+                            continue
+                        elif short_direction == 9 or short_direction == 1:
+                            stop_block = True
+                            kit.continuous_servo[0].throttle = 0
                             kit.continuous_servo[1].throttle = -1
-                            time.sleep(1.1)
+                            time.sleep(0.6)
                             short_direction = 2
                         if not time_block:
                             time_block = True
                             short_time = time.time()
                             print('new time: ', short_time)
-                        elif area_box <= 9400.0:
-                            if ccw:
-                                kit.continuous_servo[0].throttle = 0.43
-                                kit.continuous_servo[1].throttle = -1
-                        elif area_box >= 9400.0:
+                        elif time.time() - short_time < 2.1:
+                            stop_block = True
+                            kit.continuous_servo[0].throttle = -0.38
+                            kit.continuous_servo[1].throttle = 1
+                        elif time.time() - short_time >= 2.1:
                             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 2
                     elif operating_drive == 0:
                         if not time_block:
-                            short_time2 = time.time()
-                            print('new time: ', short_time2)
+                            short_time = time.time()
+                            print('new time: ', short_time)
                             time_block = True
-                        elif area_box >= 290.0:
-                            if ccw:
-                                kit.continuous_servo[0].throttle = -0.4
-                                kit.continuous_servo[1].throttle = 1
-                        elif area_box < 290.0:
-                            print('????')
-                            address = 0
+                        elif time.time() - short_time < 1.0:
+                            Motor_Steer(0.4, (error * kp) + (ang * ap), blind=True)
+                        elif time.time() - short_time >= 1.0:
+                            stop_block = False
+                            Motor_Steer(0.4, (error * kp) + (ang * ap), blind=True)
                     else:
                         print('what?')
             else:

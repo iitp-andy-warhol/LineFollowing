@@ -157,10 +157,14 @@ def follower():
                 time.sleep(1.15)
                 kit.continuous_servo[0].throttle = 0
                 kit.continuous_servo[1].throttle = 0
-            elif address == 5 or address == 2:
+            elif address == 5:
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = 1
                 time.sleep(0.9)
+            elif address == 2:
+                kit.continuous_servo[0].throttle = 1
+                kit.continuous_servo[1].throttle = 1
+                time.sleep(1.05)
             elif address == 1:
                 kit.continuous_servo[0].throttle = -1
                 kit.continuous_servo[1].throttle = -1
@@ -572,7 +576,7 @@ def follower():
                             address = 0
                     elif not ccw:
                         Motor_Steer(-0.4, (error * kp) + (ang * ap))
-                        
+
                 else:
                     print('what?')
 

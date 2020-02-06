@@ -378,6 +378,8 @@ def follower():
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = -0.1
                 time.sleep(0.6)
+                kit.continuous_servo[0].throttle = 0
+                kit.continuous_servo[1].throttle = 0
                 short_direction = 1
             short_case = 1
         elif list(display) == [9, 6, 9, 0]:
@@ -386,6 +388,8 @@ def follower():
                 kit.continuous_servo[0].throttle = 0.1
                 kit.continuous_servo[1].throttle = -1
                 time.sleep(0.6)
+                kit.continuous_servo[0].throttle = 0
+                kit.continuous_servo[1].throttle = 0
                 short_direction = 6
             short_case = 6
         elif list(display) == [9, 2, 9, 0]:
@@ -400,10 +404,14 @@ def follower():
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = -0.1
                 time.sleep(0.6)
+                kit.continuous_servo[0].throttle = 0
+                kit.continuous_servo[1].throttle = 0
             elif short_direction == 5:
                 kit.continuous_servo[0].throttle = 0.1
                 kit.continuous_servo[1].throttle = -1
                 time.sleep(0.6)
+                kit.continuous_servo[0].throttle = 0
+                kit.continuous_servo[1].throttle = 0
             else:
                 short_direction = 9
 

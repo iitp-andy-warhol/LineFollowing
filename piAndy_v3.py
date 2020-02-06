@@ -412,8 +412,7 @@ def follower():
                 time.sleep(0.6)
                 kit.continuous_servo[0].throttle = 0
                 kit.continuous_servo[1].throttle = 0
-            else:
-                short_direction = 9
+            short_direction = 9
 
         # Image handler
         image = frame.array
@@ -665,11 +664,11 @@ def follower():
                             time_block = True
                             short_time = time.time()
                             print('new time: ', short_time)
-                        elif time.time() - short_time < 1.95:
+                        elif time.time() - short_time < 1.9:
                             stop_block = True
                             kit.continuous_servo[0].throttle = -0.38
                             kit.continuous_servo[1].throttle = 1
-                        elif time.time() - short_time >= 1.95:
+                        elif time.time() - short_time >= 1.9:
                             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 2
                     elif operating_drive == 0:
@@ -694,17 +693,17 @@ def follower():
                             stop_block = True
                             kit.continuous_servo[0].throttle = 1
                             kit.continuous_servo[1].throttle = 0
-                            time.sleep(0.65)
+                            time.sleep(0.61)
                             short_direction = 5
                         if not time_block:
                             time_block = True
                             short_time = time.time()
                             print('new time: ', short_time)
-                        elif time.time() - short_time < 1.9:
+                        elif time.time() - short_time < 1.85:
                             stop_block = True
                             kit.continuous_servo[0].throttle = -0.38
                             kit.continuous_servo[1].throttle = 1
-                        elif time.time() - short_time >= 1.9:
+                        elif time.time() - short_time >= 1.85:
                             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 5
                     elif operating_drive == 0:

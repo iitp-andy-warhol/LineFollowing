@@ -556,10 +556,10 @@ def follower():
                                 Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                                 address = 1
                     elif not ccw:
-                        if time.time() - short_time < 0.3:
+                        if time.time() - short_time < 0.5:
                             kit.continuous_servo[0].throttle = -0.4
                             kit.continuous_servo[1].throttle = 1
-                        elif time.time() - short_time >= 0.3:
+                        elif time.time() - short_time >= 0.5:
                             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 1
 
@@ -617,7 +617,7 @@ def follower():
                 Motor_Steer(0.4, (error * kp) + (ang * ap))
 
         # Send robot status
-        if counter % 5 == 0:
+        if counter % 8 == 0:
             send_status_flag_lock.acquire()
             send_status_flag = True
             send_status_flag_lock.release()

@@ -10,6 +10,7 @@ from datetime import datetime
 mid_ip = '128.237.200.50'
 
 
+
 def send_robot_status(client):
     global direction, current_address, action, current_basket, operating_orderset, operating_order, next_orderset
     current_raw_status = None

@@ -542,29 +542,37 @@ def follower():
                         short_time = time.time()
                         print('new time: ', short_time)
                         time_block = True
-                    elif time.time() - short_time < 0.2:
-                        if ccw:
+                    elif ccw:
+                        if time.time() - short_time < 0.2:
                             Motor_Steer(0.4, (error * kp) + (ang * ap))
-                    elif time.time() - short_time >= 0.2:
-                        if ccw:
+                        elif time.time() - short_time >= 0.2:
                             kit.continuous_servo[0].throttle = 0.4
                             kit.continuous_servo[1].throttle = -1
-                        if area_box < 3800.0:
+                            if area_box < 3800.0:
+                                Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
+                                address = 1
+                    elif not ccw:
+                        if time.time() - short_time < 0.3:
+                            kit.continuous_servo[0].throttle = 0.4
+                            kit.continuous_servo[1].throttle = -1
+                        elif time.time() - short_time >= 0.3:
                             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 1
+
                 elif operating_drive == 0:
                     if not time_block:
                         short_time2 = time.time()
                         print('new time: ', short_time2)
                         time_block = True
-
-                    elif time.time() - short_time2 < 0.7:
-                        if ccw:
+                    elif ccw:
+                        if time.time() - short_time2 < 0.7:
                             kit.continuous_servo[0].throttle = -0.33
                             kit.continuous_servo[1].throttle = 1
-                    elif time.time() - short_time2 >= 0.7:
-                        print('????')
-                        address = 0
+                        elif time.time() - short_time2 >= 0.7:
+                            address = 0
+                    elif not ccw:
+                        Motor_Steer(-0.4, (error * kp) + (ang * ap))
+                        
                 else:
                     print('what?')
 

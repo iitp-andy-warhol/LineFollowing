@@ -579,7 +579,7 @@ def follower():
                     #         if area_box < 3800.0:
                     #             Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
                     #             address = 1
-                    elif not ccw:
+                    elif ccw:
                         stop_block = True
                         if time.time() - short_time < 0.6:
                             kit.continuous_servo[0].throttle = -0.4

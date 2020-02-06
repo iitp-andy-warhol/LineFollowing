@@ -371,6 +371,8 @@ def follower():
         if list(display) == [1, 9, 0]:
             short_flag = True
         elif list(display) == [9, 1, 9, 0]:
+            turn(ccw)
+            change_flag(ccw)
             short_flag = True
         else:
             short_flag = False

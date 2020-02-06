@@ -262,7 +262,6 @@ def follower():
     # stop0 = True
     # stop1, stop2, stop3, stop4, stop5, stop6, msg0, msg1, msg2, msg3, msg4, msg5, msg6, turn0, turn1, turn2, turn3, turn4, turn5, turn6 = make_TF(20, False)
     stop_trigger = False
-    stop_sure = False
     # turn_flag = False
     # loading_block = False
     # operating_path = 0
@@ -512,12 +511,9 @@ def follower():
                 print("stopsign: ", time.time() - start_time)
                 stop_trigger = True
             if not (len(contours_red) > 0) and stop_trigger:
-                stop_sure = True
-            if not (len(contours_red) > 0) and stop_sure:
                 print("address: LZ")
                 address = 0
                 stop_trigger = False
-                stop_sure = False
 
         # Obstacle handler
         _, wh_box, _ = blackbox
@@ -581,9 +577,12 @@ def follower():
                         elif time.time() - short_time2 >= 0.7:
                             address = 0
                     elif not ccw:
-                        stop_block = False
-                        Motor_Steer(-0.4, (error * kp) + (ang * ap))
-
+                        if time.time() - short_time2 < 0.2:
+                            Motor_Steer(-0.4, (error * kp) + (ang * ap))
+                        elif time.time() - short_time2 >= 0.2:
+                            stop_block = False
+                            Motor_Steer(-0.4, (error * kp) + (ang * ap))
+                            
                 else:
                     print('what?')
 

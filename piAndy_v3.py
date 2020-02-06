@@ -554,7 +554,7 @@ def follower():
                             kit.continuous_servo[0].throttle = 0.4
                             kit.continuous_servo[1].throttle = -1
                             if area_box < 3800.0:
-                                Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
+                                Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
                                 address = 1
                     elif not ccw:
                         stop_block = True
@@ -562,7 +562,7 @@ def follower():
                             kit.continuous_servo[0].throttle = -0.4
                             kit.continuous_servo[1].throttle = 1
                         elif time.time() - short_time >= 0.4:
-                            Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
+                            Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
                             address = 1
 
                 elif operating_drive == 0:
@@ -578,11 +578,11 @@ def follower():
                             address = 0
                     elif not ccw:
                         if time.time() - short_time2 < 0.2:
-                            Motor_Steer(-0.4, (error * kp) + (ang * ap))
+                            Motor_Steer(0.4, (error * kp) + (ang * ap))
                         elif time.time() - short_time2 >= 0.2:
                             stop_block = False
-                            Motor_Steer(-0.4, (error * kp) + (ang * ap))
-                            
+                            Motor_Steer(0.4, (error * kp) + (ang * ap))
+
                 else:
                     print('what?')
 

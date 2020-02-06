@@ -377,8 +377,8 @@ def follower():
             short_flag = True
             if short_direction == 2:
                 kit.continuous_servo[0].throttle = 1
-                kit.continuous_servo[1].throttle = -0.1
-                time.sleep(0.8)
+                kit.continuous_servo[1].throttle = -0.13
+                time.sleep(0.83)
                 kit.continuous_servo[0].throttle = 0
                 kit.continuous_servo[1].throttle = 0
                 short_direction = 1
@@ -386,9 +386,9 @@ def follower():
         elif list(display) == [9, 6, 9, 0]:
             short_flag = True
             if short_direction == 5:
-                kit.continuous_servo[0].throttle = 0.1
+                kit.continuous_servo[0].throttle = 0.13
                 kit.continuous_servo[1].throttle = -1
-                time.sleep(0.8)
+                time.sleep(0.83)
                 kit.continuous_servo[0].throttle = 0
                 kit.continuous_servo[1].throttle = 0
                 short_direction = 6
@@ -403,14 +403,14 @@ def follower():
             short_flag = False
             if short_direction == 2:
                 kit.continuous_servo[0].throttle = 1
-                kit.continuous_servo[1].throttle = -0.1
-                time.sleep(0.8)
+                kit.continuous_servo[1].throttle = -0.13
+                time.sleep(0.83)
                 kit.continuous_servo[0].throttle = 0
                 kit.continuous_servo[1].throttle = 0
             elif short_direction == 5:
-                kit.continuous_servo[0].throttle = 0.1
+                kit.continuous_servo[0].throttle = 0.13
                 kit.continuous_servo[1].throttle = -1
-                time.sleep(0.8)
+                time.sleep(0.83)
                 kit.continuous_servo[0].throttle = 0
                 kit.continuous_servo[1].throttle = 0
             short_direction = 9
@@ -694,7 +694,7 @@ def follower():
                             stop_block = True
                             kit.continuous_servo[0].throttle = 1
                             kit.continuous_servo[1].throttle = 0
-                            time.sleep(0.59)
+                            time.sleep(0.55)
                             short_direction = 5
                         if not time_block:
                             time_block = True

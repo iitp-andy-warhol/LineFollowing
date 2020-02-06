@@ -364,9 +364,9 @@ def follower():
                 operating_drive = 0
                 get_drive = False
 
-        if display == [1, 9, 0]:
+        if list(display) == [1, 9, 0]:
             short_flag = True
-        elif display == [9, 1, 9, 0]:
+        elif list(display) == [9, 1, 9, 0]:
             short_flag = True
         else:
             short_flag = False

@@ -558,10 +558,10 @@ def follower():
                     #             address = 1
                     elif not ccw:
                         stop_block = True
-                        if time.time() - short_time < 0.6:
+                        if time.time() - short_time < 0.7:
                             kit.continuous_servo[0].throttle = -0.4
                             kit.continuous_servo[1].throttle = 1
-                        elif time.time() - short_time >= 0.6:
+                        elif time.time() - short_time >= 0.7:
                             Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
                             address = 1
 
@@ -581,10 +581,10 @@ def follower():
                     #             address = 1
                     elif ccw:
                         stop_block = True
-                        if time.time() - short_time < 0.6:
+                        if time.time() - short_time < 0.7:
                             kit.continuous_servo[0].throttle = -0.4
                             kit.continuous_servo[1].throttle = 1
-                        elif time.time() - short_time >= 0.6:
+                        elif time.time() - short_time >= 0.7:
                             Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
                             address = 6
 

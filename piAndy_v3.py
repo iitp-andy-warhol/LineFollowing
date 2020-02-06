@@ -343,8 +343,8 @@ def follower():
                 print('obstacle ahead: ', area_box)
                 action = 'obstacle'
                 stop = True
-        else:
-            stop = False
+            else:
+                stop = False
 
 
         # stop False handler
@@ -694,7 +694,7 @@ def follower():
                             stop_block = True
                             kit.continuous_servo[0].throttle = 1
                             kit.continuous_servo[1].throttle = 0
-                            time.sleep(0.61)
+                            time.sleep(0.59)
                             short_direction = 5
                         if not time_block:
                             time_block = True

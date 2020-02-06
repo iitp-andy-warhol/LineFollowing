@@ -247,6 +247,7 @@ def follower():
     short_time = 0.1
     short_time2 = 0.1
     short_direction = 0
+    display = None
 
     current_path_id = None
     current_path = None
@@ -362,6 +363,11 @@ def follower():
             else:
                 operating_drive = 0
                 get_drive = False
+
+        if display == [1, 9, 0] or display == [9, 1, 9, 0]:
+            short_flag = True
+        else:
+            short_flag = False
 
         # Image handler
         image = frame.array
@@ -529,68 +535,64 @@ def follower():
         if not stop:
             if short_flag:
                 action = "moving"
-                # if ang < -1:
-                #     ang2 = -1
-                # else:
-                #     ang2 = ang
-                if operating_drive == 2:
-                    if short_direction == 9:
-                        kit.continuous_servo[0].throttle = 0.1
-                        kit.continuous_servo[1].throttle = -1
-                        time.sleep(1.1)
-                        short_direction = 2
+                if operating_drive == 1:
                     if not time_block:
-                        time_block = True
                         short_time = time.time()
                         print('new time: ', short_time)
-                    elif area_box <= 9400.0:
+                        time_block = True
+                    elif time.time() - short_time < 0.2:
                         if ccw:
-                            kit.continuous_servo[0].throttle = 0.43
+                            Motor_Steer(0.4, (error * kp) + (ang * ap))
+                    elif time.time() - short_time >= 0.2:
+                        if ccw:
+                            kit.continuous_servo[0].throttle = 0.4
                             kit.continuous_servo[1].throttle = -1
-                    elif area_box >= 9400.0:
-                        Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
-                        address = 2
+                        if area_box < 3800.0:
+                            Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
+                            address = 1
                 elif operating_drive == 0:
                     if not time_block:
                         short_time2 = time.time()
                         print('new time: ', short_time2)
                         time_block = True
-                    elif area_box >= 290.0:
+
+                    elif time.time() - short_time2 < 0.7:
                         if ccw:
-                            kit.continuous_servo[0].throttle = -0.4
+                            kit.continuous_servo[0].throttle = -0.33
                             kit.continuous_servo[1].throttle = 1
-                    elif area_box < 290.0:
+                    elif time.time() - short_time2 >= 0.7:
                         print('????')
                         address = 0
                 else:
                     print('what?')
-                # if operating_drive == 1:
+
+                # if operating_drive == 2:
+                #     if short_direction == 9:
+                #         kit.continuous_servo[0].throttle = 0.1
+                #         kit.continuous_servo[1].throttle = -1
+                #         time.sleep(1.1)
+                #         short_direction = 2
                 #     if not time_block:
+                #         time_block = True
                 #         short_time = time.time()
                 #         print('new time: ', short_time)
-                #         time_block = True
-                #     elif time.time() - short_time < 0.2:
+                #     elif area_box <= 9400.0:
                 #         if ccw:
-                #             Motor_Steer(0.4, (error * kp) + (ang * ap))
-                #     elif time.time() - short_time >= 0.2:
-                #         if ccw:
-                #             kit.continuous_servo[0].throttle = 0.4
+                #             kit.continuous_servo[0].throttle = 0.43
                 #             kit.continuous_servo[1].throttle = -1
-                #         if area_box < 3800.0:
-                #             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
-                #             address = 1
+                #     elif area_box >= 9400.0:
+                #         Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
+                #         address = 2
                 # elif operating_drive == 0:
-                #
                 #     if not time_block:
                 #         short_time2 = time.time()
                 #         print('new time: ', short_time2)
                 #         time_block = True
-                #
-                #     elif time.time() - short_time2 < 0.7:
+                #     elif area_box >= 290.0:
                 #         if ccw:
-                #             kit.continuous_servo[0].throttle = -0.33
+                #             kit.continuous_servo[0].throttle = -0.4
                 #             kit.continuous_servo[1].throttle = 1
-                #     elif time.time() - short_time2 >= 0.7:
+                #     elif area_box < 290.0:
                 #         print('????')
                 #         address = 0
                 # else:

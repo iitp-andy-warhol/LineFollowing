@@ -535,19 +535,19 @@ def follower():
                 #     ang2 = ang
                 if operating_drive == 2:
                     if short_direction == 9:
-                        kit.continuous_servo[0].throttle = -1
+                        kit.continuous_servo[0].throttle = 0.1
                         kit.continuous_servo[1].throttle = -1
-                        time.sleep(0.31)
+                        time.sleep(1.8)
                         short_direction = 2
                     if not time_block:
                         time_block = True
                         short_time = time.time()
                         print('new time: ', short_time)
-                    elif time.time() - short_time < 2.2:
+                    elif time.time() - short_time < 1.6:
                         if ccw:
                             kit.continuous_servo[0].throttle = 0.42
                             kit.continuous_servo[1].throttle = -1
-                    elif time.time() - short_time >= 2.2:
+                    elif time.time() - short_time >= 1.6:
                         Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                         address = 2
                 elif operating_drive == 0:
@@ -556,11 +556,11 @@ def follower():
                         print('new time: ', short_time2)
                         time_block = True
 
-                    elif time.time() - short_time2 < 2.1:
+                    elif time.time() - short_time2 < 1.7:
                         if ccw:
                             kit.continuous_servo[0].throttle = -0.4
                             kit.continuous_servo[1].throttle = 1
-                    elif time.time() - short_time2 >= 2.1:
+                    elif time.time() - short_time2 >= 1.7:
                         print('????')
                         address = 0
                 else:

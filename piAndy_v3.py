@@ -89,7 +89,7 @@ def follower():
     global send_status_flag, send_status_flag_lock
     global direction, current_address, action, send_status_flag, command
     global good_to_go_loading, good_to_go_unloading, get_drive, stop
-    global dash_file_name, error_type
+    global dash_file_name, error_type, time_block
 
     def change_flag(flag):
         if flag:
@@ -98,7 +98,7 @@ def follower():
             flag = True
         return flag
 
-    def Motor_Steer(speed, steering, stop=False):
+    def Motor_Steer(speed, steering, stop=False, back=False):
         global ccw
         # servo[0] -> left, 1 -> forward
         # servo[1] -> right, -1 -> forward
@@ -107,26 +107,46 @@ def follower():
         else:
             param = 0.8
 
-        if stop == True:
-            kit.continuous_servo[0].throttle = 0
-            kit.continuous_servo[1].throttle = 0
-            return
-        elif steering == 0:
-            kit.continuous_servo[0].throttle = speed
-            kit.continuous_servo[1].throttle = -1 * speed * param
-            return
-        elif steering > 0:
-            steering = 100 - steering
-            kit.continuous_servo[0].throttle = speed
-            kit.continuous_servo[1].throttle = -1 * speed * steering / 100 * param
-            return
-        elif steering < 0:
-            steering = steering * -1
-            steering = 100 - steering
-            kit.continuous_servo[0].throttle = speed * steering / 100
-            kit.continuous_servo[1].throttle = -1 * speed * param
-            return
-
+        if back:
+            if stop == True:
+                kit.continuous_servo[0].throttle = 0
+                kit.continuous_servo[1].throttle = 0
+                return
+            elif steering == 0:
+                kit.continuous_servo[0].throttle = -1 *speed
+                kit.continuous_servo[1].throttle = speed
+                return
+            elif steering > 0:
+                steering = 100 - steering
+                kit.continuous_servo[0].throttle = -1 * speed * steering / 100
+                kit.continuous_servo[1].throttle = speed
+                return
+            elif steering < 0:
+                steering = steering * -1
+                steering = 100 - steering
+                kit.continuous_servo[0].throttle = -1 * speed
+                kit.continuous_servo[1].throttle = speed * steering / 100
+                return
+        else:
+            if stop == True:
+                kit.continuous_servo[0].throttle = 0
+                kit.continuous_servo[1].throttle = 0
+                return
+            elif steering == 0:
+                kit.continuous_servo[0].throttle = speed
+                kit.continuous_servo[1].throttle = -1 * speed * param
+                return
+            elif steering > 0:
+                steering = 100 - steering
+                kit.continuous_servo[0].throttle = speed
+                kit.continuous_servo[1].throttle = -1 * speed * steering / 100 * param
+                return
+            elif steering < 0:
+                steering = steering * -1
+                steering = 100 - steering
+                kit.continuous_servo[0].throttle = speed * steering / 100
+                kit.continuous_servo[1].throttle = -1 * speed * param
+                return
 
 
     def turn(ccw):
@@ -184,17 +204,18 @@ def follower():
             self.msg = msg
 
         def get_stop(self):
-            global action, stop, get_drive, good_to_go_loading, good_to_go_unloading
+            global action, stop, get_drive, good_to_go_loading, good_to_go_unloading, time_block
             if self.id == operating_drive:
                 if self.id == address:
                     stop = True
-                    Motor_Steer(0.4, (error * kp) + (ang * ap), True)
+                    Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
                     if self.id == 0:
                         action = "loading"
                         if good_to_go_loading:
                             stop = False
                             get_drive = True
                             good_to_go_loading = False
+                            time_block = False
                             print("Loading Confirm!!!", stop)
                     else:
                         action = "unloading"
@@ -202,6 +223,7 @@ def follower():
                             stop = False
                             get_drive = True
                             good_to_go_unloading = False
+                            time_block = False
                             print("Unloading Confirm!!!")
 
     address0 = Address(0, False)
@@ -220,6 +242,11 @@ def follower():
     ccw = True
     mmode_flag = False
     stop = True
+    short_flag = False
+    time_block = False
+    short_time = 0.1
+    short_time2 = 0.1
+    short_direction = 0
 
     current_path_id = None
     current_path = None
@@ -268,7 +295,8 @@ def follower():
     dash_memory = np.zeros((2400, 320, 3))
     dash_block_flag = False
 
-    start_time = time.time()
+    short_time = time.time()
+    # start_time2 = time.time()
     counter = 0
 
 
@@ -295,13 +323,17 @@ def follower():
 
         if mmode_flag: # M-mode handler
             action = "M-mode"
-            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
+            Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
             stop = True
-        elif area_box < 5000.0:  # obstacle handler
-            Motor_Steer(0.4, (error * kp) + (ang * ap), True)
+        elif short_flag:
+            # if area_box < 2000.0:  # obstacle handler
             print('obstacle ahead: ', area_box)
-            action = 'obstacle'
-            stop = True
+        elif not short_flag:
+            if area_box < 5000.0:  # obstacle handler
+                Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
+                print('obstacle ahead: ', area_box)
+                action = 'obstacle'
+                stop = True
         else:
             stop = False
 
@@ -320,6 +352,7 @@ def follower():
         if get_drive:
             if path_id != current_path_id:
                 current_path = list(next_path)
+                display = np.copy(list(next_path))
                 current_path_id = np.copy(path_id)
             if len(current_path) > 0:
                 operating_drive = current_path.pop(0)
@@ -333,7 +366,10 @@ def follower():
         # Image handler
         image = frame.array
         # out.write(image)
-        roi = image[60:239, 0:319]
+        if short_flag:
+            roi = image[110:239, 0:319]
+        else:
+            roi = image[60:239, 0:319]
         hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
         # yellow_lower = np.array([22, 60, 200], np.uint8)
         yellow_lower = np.array([22, 0, 150], np.uint8)
@@ -398,7 +434,7 @@ def follower():
             ang = int(ang)
 
         # Get Address, based on the ang
-        if not mmode_flag:  # to avoid false detection
+        if not mmode_flag and not short_flag:  # to avoid false detection
             if ccw:
                 if address == 0 and ang > 40:
                     print("error: turn to ccw")
@@ -473,10 +509,14 @@ def follower():
 
         # Stop handler
         if operating_drive == 9:
-            print("turn!")
-            turn(ccw)
-            ccw = change_flag(ccw)
-            get_drive = True
+            if short_flag:
+                print("short, no turn!")
+                get_drive = True
+            else:
+                print("turn!")
+                turn(ccw)
+                ccw = change_flag(ccw)
+                get_drive = True
         else:
             address0.get_stop()
             address1.get_stop()
@@ -487,9 +527,78 @@ def follower():
             address6.get_stop()
 
         if not stop:
-            action = "moving"
-            # print("moving!!")
-            Motor_Steer(0.4, (error * kp) + (ang * ap))
+            if short_flag:
+                action = "moving"
+                # if ang < -1:
+                #     ang2 = -1
+                # else:
+                #     ang2 = ang
+                if operating_drive == 2:
+                    if short_direction == 9:
+                        kit.continuous_servo[0].throttle = 0.1
+                        kit.continuous_servo[1].throttle = -1
+                        time.sleep(1.1)
+                        short_direction = 2
+                    if not time_block:
+                        time_block = True
+                        short_time = time.time()
+                        print('new time: ', short_time)
+                    elif area_box <= 9400.0:
+                        if ccw:
+                            kit.continuous_servo[0].throttle = 0.43
+                            kit.continuous_servo[1].throttle = -1
+                    elif area_box >= 9400.0:
+                        Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
+                        address = 2
+                elif operating_drive == 0:
+                    if not time_block:
+                        short_time2 = time.time()
+                        print('new time: ', short_time2)
+                        time_block = True
+                    elif area_box >= 290.0:
+                        if ccw:
+                            kit.continuous_servo[0].throttle = -0.4
+                            kit.continuous_servo[1].throttle = 1
+                    elif area_box < 290.0:
+                        print('????')
+                        address = 0
+                else:
+                    print('what?')
+                # if operating_drive == 1:
+                #     if not time_block:
+                #         short_time = time.time()
+                #         print('new time: ', short_time)
+                #         time_block = True
+                #     elif time.time() - short_time < 0.2:
+                #         if ccw:
+                #             Motor_Steer(0.4, (error * kp) + (ang * ap))
+                #     elif time.time() - short_time >= 0.2:
+                #         if ccw:
+                #             kit.continuous_servo[0].throttle = 0.4
+                #             kit.continuous_servo[1].throttle = -1
+                #         if area_box < 3800.0:
+                #             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
+                #             address = 1
+                # elif operating_drive == 0:
+                #
+                #     if not time_block:
+                #         short_time2 = time.time()
+                #         print('new time: ', short_time2)
+                #         time_block = True
+                #
+                #     elif time.time() - short_time2 < 0.7:
+                #         if ccw:
+                #             kit.continuous_servo[0].throttle = -0.33
+                #             kit.continuous_servo[1].throttle = 1
+                #     elif time.time() - short_time2 >= 0.7:
+                #         print('????')
+                #         address = 0
+                # else:
+                #     print('what?')
+            else:
+                action = "moving"
+                # print("moving!!")
+                Motor_Steer(0.4, (error * kp) + (ang * ap))
 
         # Send robot status
         if counter % 5 == 0:
@@ -548,6 +657,13 @@ def follower():
             mmode_flag = False
             print("M-mode Off")
             dash_block_flag = False
+        elif key == ord("o"):
+            short_flag = True
+            short_direction = 9
+            print('short on')
+        elif key == ord("p"):
+            short_flag = False
+            print('short off')
         # Terminate process
         elif key == ord("q"):
             kit.continuous_servo[0].throttle = 0
@@ -589,6 +705,7 @@ stop = True
 dash_file_name = None
 error_type = None
 ping = None
+time_block = False
 
 send_status_flag = False
 send_status_flag_lock = th.Lock()

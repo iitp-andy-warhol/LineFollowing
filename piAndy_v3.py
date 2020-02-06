@@ -605,6 +605,12 @@ def follower():
                         elif time.time() - short_time2 >= 0.2:
                             stop_block = False
                             Motor_Steer(0.4, (error * kp) + (ang * ap))
+                    elif ccw:
+                        if time.time() - short_time2 < 0.2:
+                            Motor_Steer(0.4, (error * kp) + (ang * ap))
+                        elif time.time() - short_time2 >= 0.2:
+                            stop_block = False
+                            Motor_Steer(0.4, (error * kp) + (ang * ap))
 
                 else:
                     print('what?')

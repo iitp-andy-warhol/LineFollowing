@@ -537,7 +537,7 @@ def follower():
                     if short_direction == 9:
                         kit.continuous_servo[0].throttle = -1
                         kit.continuous_servo[1].throttle = -1
-                        time.sleep(0.3)
+                        time.sleep(0.33)
                         short_direction = 2
                     if not time_block:
                         time_block = True
@@ -545,7 +545,7 @@ def follower():
                         print('new time: ', short_time)
                     elif time.time() - short_time < 2.1:
                         if ccw:
-                            kit.continuous_servo[0].throttle = 0.43
+                            kit.continuous_servo[0].throttle = 0.42
                             kit.continuous_servo[1].throttle = -1
                     elif time.time() - short_time >= 2.1:
                         Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)

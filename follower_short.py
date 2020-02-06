@@ -246,6 +246,7 @@ def follower():
     time_block = False
     short_time = 0.1
     short_time2 = 0.1
+    short_direction = 0
 
     current_path_id = None
     current_path = None
@@ -533,11 +534,13 @@ def follower():
                 # else:
                 #     ang2 = ang
                 if operating_drive == 2:
-                    if not time_block:
-                        time_block = True
+                    if short_direction == 9:
                         kit.continuous_servo[0].throttle = -1
                         kit.continuous_servo[1].throttle = -1
                         time.sleep(0.3)
+                        short_direction = 2
+                    if not time_block:
+                        time_block = True
                         short_time = time.time()
                         print('new time: ', short_time)
                     elif time.time() - short_time < 2.0:
@@ -657,6 +660,7 @@ def follower():
             dash_block_flag = False
         elif key == ord("o"):
             short_flag = True
+            short_direction = 9
             print('short on')
         elif key == ord("p"):
             short_flag = False

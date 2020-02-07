@@ -185,9 +185,9 @@ def receive_robot_command(client):
         command['ping'] = time.time()
         # print("Command: ", command)
         sendData = pickle.dumps(command, protocol=3)
-        client.send(sendData)
-        input_id += 1
 
+        client.send(sendData)
+        # input_id += 1
         # # print("Message: ", massage, time.strftime('%c', time.localtime(time.time())))
         # if massage != current_massage:
         #     # print("Message: ", massage, time.strftime('%c', time.localtime(time.time())))

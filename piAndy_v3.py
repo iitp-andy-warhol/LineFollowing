@@ -257,6 +257,7 @@ def follower():
     stop_block = False
     short_direction = 0
     short_case = 0
+    short_mode = False
 
     current_path_id = None
     current_path = None
@@ -373,47 +374,48 @@ def follower():
                 get_drive = False
 
         # Short handler
-        if list(display) == [9, 1, 9, 0]:
-            short_flag = True
-            if short_direction == 2:
-                kit.continuous_servo[0].throttle = 1
-                kit.continuous_servo[1].throttle = -0.13
-                time.sleep(0.83)
-                kit.continuous_servo[0].throttle = 0
-                kit.continuous_servo[1].throttle = 0
-                short_direction = 1
-            short_case = 1
-        elif list(display) == [9, 6, 9, 0]:
-            short_flag = True
-            if short_direction == 5:
-                kit.continuous_servo[0].throttle = 0.13
-                kit.continuous_servo[1].throttle = -1
-                time.sleep(0.83)
-                kit.continuous_servo[0].throttle = 0
-                kit.continuous_servo[1].throttle = 0
-                short_direction = 6
-            short_case = 6
-        elif list(display) == [9, 2, 9, 0]:
-            short_flag = True
-            short_case = 2
-        elif list(display) == [9, 5, 9, 0]:
-            short_flag = True
-            short_case = 5
-        else:
-            short_flag = False
-            if short_direction == 2:
-                kit.continuous_servo[0].throttle = 1
-                kit.continuous_servo[1].throttle = -0.13
-                time.sleep(0.83)
-                kit.continuous_servo[0].throttle = 0
-                kit.continuous_servo[1].throttle = 0
-            elif short_direction == 5:
-                kit.continuous_servo[0].throttle = 0.13
-                kit.continuous_servo[1].throttle = -1
-                time.sleep(0.83)
-                kit.continuous_servo[0].throttle = 0
-                kit.continuous_servo[1].throttle = 0
-            short_direction = 9
+        if short_mode:
+            if list(display) == [9, 1, 9, 0]:
+                short_flag = True
+                if short_direction == 2:
+                    kit.continuous_servo[0].throttle = 1
+                    kit.continuous_servo[1].throttle = -0.13
+                    time.sleep(0.83)
+                    kit.continuous_servo[0].throttle = 0
+                    kit.continuous_servo[1].throttle = 0
+                    short_direction = 1
+                short_case = 1
+            elif list(display) == [9, 6, 9, 0]:
+                short_flag = True
+                if short_direction == 5:
+                    kit.continuous_servo[0].throttle = 0.13
+                    kit.continuous_servo[1].throttle = -1
+                    time.sleep(0.83)
+                    kit.continuous_servo[0].throttle = 0
+                    kit.continuous_servo[1].throttle = 0
+                    short_direction = 6
+                short_case = 6
+            elif list(display) == [9, 2, 9, 0]:
+                short_flag = True
+                short_case = 2
+            elif list(display) == [9, 5, 9, 0]:
+                short_flag = True
+                short_case = 5
+            else:
+                short_flag = False
+                if short_direction == 2:
+                    kit.continuous_servo[0].throttle = 1
+                    kit.continuous_servo[1].throttle = -0.13
+                    time.sleep(0.83)
+                    kit.continuous_servo[0].throttle = 0
+                    kit.continuous_servo[1].throttle = 0
+                elif short_direction == 5:
+                    kit.continuous_servo[0].throttle = 0.13
+                    kit.continuous_servo[1].throttle = -1
+                    time.sleep(0.83)
+                    kit.continuous_servo[0].throttle = 0
+                    kit.continuous_servo[1].throttle = 0
+                short_direction = 9
 
         # Image handler
         image = frame.array
@@ -783,11 +785,10 @@ def follower():
             print("M-mode Off")
             dash_block_flag = False
         elif key == ord("o"):
-            short_flag = True
-            short_direction = 9
+            short_mode = True
             print('short on')
         elif key == ord("p"):
-            short_flag = False
+            short_mode = False
             print('short off')
         # Terminate process
         elif key == ord("q"):

@@ -505,7 +505,7 @@ def follower():
                 elif address == 2 and ang < -60:
                     print("address: 103")
                     address = 3
-                elif address == 3 and ang > -30:
+                elif address == 3 and ang > -40:
                     road = 34
                 elif road == 34 and ang < -65:
                     print("address: 203")
@@ -533,9 +533,9 @@ def follower():
                 elif address == 5 and ang > 65:
                     print("address: 203")
                     address = 4
-                elif address == 4 and ang < 35:
+                elif address == 4 and ang < 45:
                     road = 43
-                elif road == 43 and ang > 65:
+                elif road == 43 and ang > 60:
                     print("address: 103")
                     address = 3
                     road = 0

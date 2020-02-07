@@ -31,7 +31,7 @@ def send_robot_status(client):
         robot_ping = time.time() - raw_status['ping']
 
         if raw_status != current_raw_status:
-            print("Raw status: ", raw_status, time.strftime('%c', time.localtime(time.time())))
+            # print("Raw status: ", raw_status, time.strftime('%c', time.localtime(time.time())))
             current_raw_status = np.copy(raw_status)
 
         direction = raw_status['direction']

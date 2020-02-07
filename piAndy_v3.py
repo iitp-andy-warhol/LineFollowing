@@ -490,7 +490,7 @@ def follower():
         # Get Address, based on the ang
         if not mmode_flag and not short_flag:  # to avoid false detection
             if ccw:
-                if address == 0 and ang > 40:
+                if address == 0 and ang > 55:
                     print("error: turn to ccw")
                     turn(ccw)
                 elif address == 0 and ang < -60:
@@ -518,7 +518,7 @@ def follower():
                     print("address: 201")
                     address = 6
             else:
-                if address == 0 and ang < -40:
+                if address == 0 and ang < -55:
                     print("error: turn to cw")
                     turn(ccw)
                 elif address == 0 and ang > 60:

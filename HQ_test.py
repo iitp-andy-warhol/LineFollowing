@@ -77,6 +77,7 @@ def receive_robot_command(client):
     input_path = [0]
     input_msg = None
     i = 0
+    temp = None
 
     while True:
 
@@ -122,36 +123,41 @@ def receive_robot_command(client):
         c1 = input_path.count(9)
         limit = len(input_path) - c1
 
-        while True:
-            if i == 0:
-                if action == 'loading':
-                    input_msg = 'loading_complete'
-                    i += 1
-                else:
-                    time.sleep(0.5)
-                    continue
-            elif i < limit:
-                if action == 'unloading':
-                    input_msg = 'unloading_complete'
-                    i += 0
-                else:
-                    time.sleep(0.5)
-            elif i == limit:
-                break
+        if input_id != temp:
+            while True:
+                temp = input_id
+                if i == 0:
+                    if action == 'loading':
+                        input_msg = 'loading_complete'
+                        i += 1
+                    else:
+                        time.sleep(1)
+                        continue
+                elif i < limit:
+                    if action == 'unloading':
+                        input_msg = 'unloading_complete'
+                        i += 0
+                    else:
+                        time.sleep(1)
+                elif i == limit:
+                    input_id += 1
+                    break
 
-            command = {
-                'message': input_msg,  # loading_complete / unloading_complete / None
-                'path': tuple(input_path),  # path / None
-                'path_id': input_id,  # to ignore same path
-                'ping': 0
-            }
+                command = {
+                    'message': input_msg,  # loading_complete / unloading_complete / None
+                    'path': tuple(input_path),  # path / None
+                    'path_id': input_id,  # to ignore same path
+                    'ping': 0
+                }
 
-            command['ping'] = time.time()
-            print("Command: ", command)
-            sendData = pickle.dumps(command, protocol=3)
-            client.send(sendData)
+                command['ping'] = time.time()
+                print("Command: ", command)
+                sendData = pickle.dumps(command, protocol=3)
+                client.send(sendData)
+        else:
+            time.sleep(0.1)
 
-        input_id += 1
+        print('!!!!!! input_id: ', input_id)
 
         # input_path = input("path: ")
         # input_id = int(input("path_id: "))

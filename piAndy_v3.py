@@ -339,7 +339,7 @@ def follower():
             # print('obstacle ahead: ', area_box)
             pass
         elif not short_flag:
-            if area_box < 5000.0:  # obstacle handler
+            if area_box < 4000.0:  # obstacle handler
                 Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
                 print('obstacle ahead: ', area_box)
                 action = 'obstacle'

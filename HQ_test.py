@@ -78,7 +78,7 @@ def receive_robot_command(client):
     input_msg = None
     i = 0
     temp = None
-
+    time.sleep(5)
     while True:
 
         random_path = []
@@ -124,8 +124,9 @@ def receive_robot_command(client):
         limit = len(input_path) - c1
 
         if input_id != temp:
-            while True:
+            while i <= limit:
                 temp = input_id
+                print(i)
                 if i == 0:
                     if action == 'loading':
                         input_msg = 'loading_complete'
@@ -136,12 +137,12 @@ def receive_robot_command(client):
                 elif i < limit:
                     if action == 'unloading':
                         input_msg = 'unloading_complete'
-                        i += 0
+                        i += 1
+                        time.sleep(0.5)
                     else:
                         time.sleep(1)
                 elif i == limit:
-                    input_id += 1
-                    break
+                    i += 1
 
                 command = {
                     'message': input_msg,  # loading_complete / unloading_complete / None
@@ -149,15 +150,17 @@ def receive_robot_command(client):
                     'path_id': input_id,  # to ignore same path
                     'ping': 0
                 }
-
+                time.sleep(1)
                 command['ping'] = time.time()
                 print("Command: ", command)
                 sendData = pickle.dumps(command, protocol=3)
                 client.send(sendData)
         else:
             time.sleep(0.1)
-
+        i = 0
         print('!!!!!! input_id: ', input_id)
+        input_id += 1
+
 
         # input_path = input("path: ")
         # input_id = int(input("path_id: "))

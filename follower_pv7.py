@@ -170,6 +170,7 @@ address = 0
 road = 0
 address0_time = 0
 ang_list = []
+box_list = []
 dash_memory = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 dash_block_flag = False
 stop_trigger = False
@@ -312,7 +313,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         # stop
         if mmode_flag:
             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
-        elif area < 7500.0:
+        elif area < 3000.0:
             Motor_Steer(0.4, (error * kp) + (ang * ap), True)
             print('obstacle: ', area)
         elif address == 0 and start and turn0:
@@ -370,6 +371,8 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     #cv2.drawContours(image, contours_blk, -1, (0,255,0), 3)
 
     ang_list += [[time.time() - start_time, ang]]
+    box_list += [[time.time() - start_time, area]]
+
     if counter % 10 == 0 and not dash_block_flag:
         dash_memory.pop(0)
         dash_memory.append(image)
@@ -446,3 +449,7 @@ fps = counter / (finish_time - start_time)
 print("fps = " + str(fps))
 ang_list = np.array(ang_list)
 # np.save("./ang_list_ccw_p.npy", ang_list)
+box_list = np.array(box_list)
+np.save("./box_list_ccw_p.npy", box_list)
+
+

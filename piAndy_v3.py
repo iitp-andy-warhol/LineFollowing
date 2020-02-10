@@ -48,7 +48,7 @@ def HQ_client():
                 robot_status = makeRobotStatus(direction, current_address, action, ping)
 
                 sendData = pickle.dumps(robot_status, protocol=pickle.HIGHEST_PROTOCOL)
-                sock.send(sendData)
+                sock.sendall(sendData)
 
                 if current_status != robot_status:
                     print("send", robot_status)

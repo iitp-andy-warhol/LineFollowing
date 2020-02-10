@@ -70,7 +70,7 @@ def HQ_client():
         return dic
 
     # Connect to HQ
-    HQ_ip = '128.237.114.233'
+    HQ_ip = '128.237.124.116'
     HQ_port = 8090
 
     clientSock = socket(AF_INET, SOCK_STREAM)

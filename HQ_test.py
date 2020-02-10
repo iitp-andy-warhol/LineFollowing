@@ -137,6 +137,7 @@ def receive_robot_command(client):
                         continue
                 elif i < limit:
                     if action == 'unloading':
+                        time.sleep(0.7)
                         input_msg = 'unloading_complete'
                         i += 1
                         time.sleep(1)

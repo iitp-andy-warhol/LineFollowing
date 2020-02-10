@@ -265,6 +265,8 @@ def follower():
     short_direction = 0
     short_case = 0
     short_mode = False
+    turnblock_time = 0.0
+    turnblock2_time = 10.0
 
     current_path_id = None
     current_path = None
@@ -346,13 +348,15 @@ def follower():
             # print('obstacle ahead: ', area_box)
             pass
         elif not short_flag:
-            if area_box < 5000.0:  # obstacle handler
-                Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
-                print('obstacle ahead: ', area_box)
-                action = 'obstacle'
-                stop = True
-            else:
-                stop = False
+            turnblock2_time = time.time()
+            if turnblock2_time - turnblock_time > 0.5:
+                if area_box < 5000.0:  # obstacle handler
+                    Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
+                    print('obstacle ahead: ', area_box)
+                    action = 'obstacle'
+                    stop = True
+                else:
+                    stop = False
 
 
         # stop False handler
@@ -555,13 +559,14 @@ def follower():
 
         # Stop sign handler
         if not mmode_flag and not stop_block:
-            if len(contours_red) > 0:
-                print("stopsign: ", time.time() - start_time)
-                stop_trigger = True
-            if not (len(contours_red) > 0) and stop_trigger:
-                print("address: LZ")
-                address = 0
-                stop_trigger = False
+            if operating_drive == 0:
+                if len(contours_red) > 0:
+                    print("stopsign: ", time.time() - start_time)
+                    stop_trigger = True
+                if not (len(contours_red) > 0) and stop_trigger:
+                    print("address: LZ")
+                    address = 0
+                    stop_trigger = False
 
         # Obstacle handler
         _, wh_box, _ = blackbox
@@ -576,6 +581,7 @@ def follower():
             else:
                 print("turn!")
                 turn(ccw)
+                turnblock_time = time.time()
                 ccw = change_flag(ccw)
                 get_drive = True
         else:

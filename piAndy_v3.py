@@ -558,9 +558,9 @@ def follower():
                     address = 1
 
         if not short_flag:
-            if ccw and address == 6:
+            if ccw and address == 6 and action == 'moving':
                 stop_block = False
-            elif not ccw and address == 1:
+            elif not ccw and address == 1 and action == 'moving':
                 stop_block = False
             else:
                 stop_block = True

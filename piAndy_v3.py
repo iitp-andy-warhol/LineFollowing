@@ -196,9 +196,9 @@ def follower():
                 kit.continuous_servo[1].throttle = -1
                 time.sleep(0.2)
             elif address == 4:
-                kit.continuous_servo[0].throttle = -1
-                kit.continuous_servo[1].throttle = -1
-                time.sleep(1.2)
+                kit.continuous_servo[0].throttle = 1
+                kit.continuous_servo[1].throttle = 1
+                time.sleep(1.1)
             elif address == 5:
                 kit.continuous_servo[0].throttle = -1
                 kit.continuous_servo[1].throttle = -1
@@ -553,7 +553,7 @@ def follower():
                 elif address == 3 and ang < 10:
                     print("address: 102")
                     address = 2
-                elif address == 2 and ang > 65:
+                elif address == 2 and ang > 59:
                     print("address: 101")
                     address = 1
 

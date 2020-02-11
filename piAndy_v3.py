@@ -558,13 +558,13 @@ def follower():
                     address = 1
 
         if not short_flag:
-            if operating_drive != 0:
-                stop_block = True
+            if ccw and address == 6:
+                stop_block = False
+            elif not ccw and address == 1:
+                stop_block = False
             else:
-                if ccw and address == 6:
-                    stop_block = False
-                elif not ccw and address == 1:
-                    stop_block = False
+                stop_block = True
+
 
         # Stop sign handler
         if not mmode_flag and not stop_block:

@@ -771,6 +771,8 @@ def follower():
         # cv2.line(image, (int(x_min), 190), (int(x_min), 230), (255, 0, 0), 3)
 
         # cv2.drawContours(image, contours_red, -1, (0,255,0), 3)
+        good_to_go_unloading = False
+        good_to_go_loading = False
 
         cv2.imshow("original with line", image)
         rawCapture.truncate(0)

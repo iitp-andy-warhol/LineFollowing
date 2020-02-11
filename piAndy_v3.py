@@ -267,7 +267,6 @@ def follower():
     short_time = 0.1
     display = []
     stop_block = False
-    short_direction = 0
     short_case = 0
     short_mode = False
     turnblock_time = 0.0
@@ -393,23 +392,9 @@ def follower():
         if short_mode:
             if list(display) == [9, 1, 9, 0]:
                 short_flag = True
-                if short_direction == 2:
-                    kit.continuous_servo[0].throttle = 1
-                    kit.continuous_servo[1].throttle = -0.13
-                    time.sleep(0.83)
-                    kit.continuous_servo[0].throttle = 0
-                    kit.continuous_servo[1].throttle = 0
-                    short_direction = 1
                 short_case = 1
             elif list(display) == [9, 6, 9, 0]:
                 short_flag = True
-                if short_direction == 5:
-                    kit.continuous_servo[0].throttle = 0.13
-                    kit.continuous_servo[1].throttle = -1
-                    time.sleep(0.83)
-                    kit.continuous_servo[0].throttle = 0
-                    kit.continuous_servo[1].throttle = 0
-                    short_direction = 6
                 short_case = 6
             elif list(display) == [9, 2, 9, 0]:
                 short_flag = True
@@ -419,19 +404,6 @@ def follower():
                 short_case = 5
             else:
                 short_flag = False
-                if short_direction == 2:
-                    kit.continuous_servo[0].throttle = 1
-                    kit.continuous_servo[1].throttle = -0.13
-                    time.sleep(0.83)
-                    kit.continuous_servo[0].throttle = 0
-                    kit.continuous_servo[1].throttle = 0
-                elif short_direction == 5:
-                    kit.continuous_servo[0].throttle = 0.13
-                    kit.continuous_servo[1].throttle = -1
-                    time.sleep(0.83)
-                    kit.continuous_servo[0].throttle = 0
-                    kit.continuous_servo[1].throttle = 0
-                short_direction = 9
 
         # Image handler
         image = frame.array
@@ -558,7 +530,7 @@ def follower():
                 elif address == 3 and ang < 10:
                     print("address: 102")
                     address = 2
-                elif address == 2 and ang > 59:
+                elif address == 2 and ang > 61:
                     print("address: 101")
                     address = 1
 
@@ -636,7 +608,6 @@ def follower():
                                 Motor_Steer(0.4, (error * kp) + (ang * ap))
                             elif time.time() - short_time >= 0.2:
                                 stop_block = False
-                                short_direction = 1
                                 Motor_Steer(0.4, (error * kp) + (ang * ap))
                         elif ccw:
                             short_flag = False
@@ -670,7 +641,6 @@ def follower():
                                 Motor_Steer(0.4, (error * kp) + (ang * ap))
                             elif time.time() - short_time >= 0.2:
                                 stop_block = False
-                                short_direction = 6
                                 Motor_Steer(0.4, (error * kp) + (ang * ap))
                         elif not ccw:
                             short_flag = False
@@ -683,33 +653,27 @@ def follower():
                         if ccw:
                             short_flag = False
                             continue
-                        elif short_direction == 9 or short_direction == 1:
-                            stop_block = True
-                            kit.continuous_servo[0].throttle = 0
-                            kit.continuous_servo[1].throttle = -1
-                            time.sleep(0.55)
-                            short_direction = 2
                         if not time_block:
                             time_block = True
                             short_time = time.time()
                             print('new time: ', short_time)
-                        elif time.time() - short_time < 1.9:
+                        elif time.time() - short_time < 2.2:
                             stop_block = True
-                            kit.continuous_servo[0].throttle = -0.38
-                            kit.continuous_servo[1].throttle = 1
-                        elif time.time() - short_time >= 1.9:
-                            Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
+                            kit.continuous_servo[0].throttle = -1.0
+                            kit.continuous_servo[1].throttle = 0.28
+                        # elif time.time() - short_time >= 1.9:
+                        #     Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 2
                     elif operating_drive == 0:
                         if not time_block:
                             short_time = time.time()
                             print('new time: ', short_time)
                             time_block = True
-                        elif time.time() - short_time < 0.5:
-                            Motor_Steer(0.4, (error * kp) + (ang * ap), blind=True)
-                        elif time.time() - short_time >= 0.5:
+                        elif time.time() - short_time < 1.0:
+                            Motor_Steer(0.4, (error * kp) + (ang * ap))
+                        elif time.time() - short_time >= 1.0:
                             stop_block = False
-                            Motor_Steer(0.4, (error * kp) + (ang * ap), blind=True)
+                            Motor_Steer(0.4, (error * kp) + (ang * ap))
                     else:
                         print('what?')
 
@@ -718,33 +682,27 @@ def follower():
                         if not ccw:
                             short_flag = False
                             continue
-                        elif short_direction == 9 or short_direction == 6:
-                            stop_block = True
-                            kit.continuous_servo[0].throttle = 1
-                            kit.continuous_servo[1].throttle = 0
-                            time.sleep(0.55)
-                            short_direction = 5
                         if not time_block:
                             time_block = True
                             short_time = time.time()
                             print('new time: ', short_time)
-                        elif time.time() - short_time < 1.8:
+                        elif time.time() - short_time < 2.2:
                             stop_block = True
-                            kit.continuous_servo[0].throttle = -0.38
-                            kit.continuous_servo[1].throttle = 1
-                        elif time.time() - short_time >= 1.8:
-                            Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
+                            kit.continuous_servo[0].throttle = -0.22
+                            kit.continuous_servo[1].throttle = 0.8
+                        # elif time.time() - short_time >= 1.8:
+                        #     Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 5
                     elif operating_drive == 0:
                         if not time_block:
                             short_time = time.time()
                             print('new time: ', short_time)
                             time_block = True
-                        elif time.time() - short_time < 0.5:
-                            Motor_Steer(0.4, (error * kp) + (ang * ap), blind=True)
-                        elif time.time() - short_time >= 0.5:
+                        elif time.time() - short_time < 1.0:
+                            Motor_Steer(0.4, (error * kp) + (ang * ap))
+                        elif time.time() - short_time >= 1.0:
                             stop_block = False
-                            Motor_Steer(0.4, (error * kp) + (ang * ap), blind=True)
+                            Motor_Steer(0.4, (error * kp) + (ang * ap))
                     else:
                         print('what?')
 

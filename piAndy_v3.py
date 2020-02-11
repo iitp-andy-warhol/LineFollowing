@@ -158,7 +158,7 @@ def follower():
             if address == 0:
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = 1
-                time.sleep(1.15)
+                time.sleep(1.05)
                 kit.continuous_servo[0].throttle = 0
                 kit.continuous_servo[1].throttle = 0
             elif address == 5:
@@ -174,9 +174,11 @@ def follower():
                 kit.continuous_servo[1].throttle = -1
                 time.sleep(1.0)
             elif address == 3:
-                kit.continuous_servo[0].throttle = 1
-                kit.continuous_servo[1].throttle = 1
-                time.sleep(1.3)
+                kit.continuous_servo[0].throttle = -1
+                kit.continuous_servo[1].throttle = -1
+                time.sleep(1.0)
+                kit.continuous_servo[1].throttle = -1
+                time.sleep(0.1)
             else:
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = 1
@@ -193,12 +195,15 @@ def follower():
                 kit.continuous_servo[1].throttle = -1
                 time.sleep(1.2)
                 kit.continuous_servo[0].throttle = 1
-                kit.continuous_servo[1].throttle = -1
-                time.sleep(0.2)
+                kit.continuous_servo[1].throttle = -0.13
+                time.sleep(0.1)
             elif address == 4:
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = 1
                 time.sleep(1.1)
+                kit.continuous_servo[0].throttle = 0.4
+                kit.continuous_servo[1].throttle = -1
+                time.sleep(0.1)
             elif address == 5:
                 kit.continuous_servo[0].throttle = -1
                 kit.continuous_servo[1].throttle = -1

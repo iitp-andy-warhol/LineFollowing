@@ -20,9 +20,9 @@ def HQ_client():
             recvData = sock.recv(4096)
             command = pickle.loads(recvData)
 
-            if current_command != command:
+            if current_command != (command['message'], command['path'], command['path_id']):
                 print("received", command)
-                current_command = command
+                current_command = (command['message'], command['path'], command['path_id'])
 
 
     def send_status(sock):

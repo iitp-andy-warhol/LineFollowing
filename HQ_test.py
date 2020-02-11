@@ -73,121 +73,122 @@ def receive_robot_command(client):
     current_id = None
     orderset_block = False
 
-    input_id = 1
-    input_path = [0]
-    input_msg = None
-    i = 0
-    temp = None
-    time.sleep(5)
+    # input_id = 1
+    # input_path = [0]
+    # input_msg = None
+    # i = 0
+    # temp = None
+    # time.sleep(5)
     while True:
-        time.sleep(1)
-        random_path = []
-        if direction == 1:
-            r1 = random.randint(1, 6)
-            if r1 < 4:
-                random_path += [r1]
-                random_path += [9]
-                if r1 == 3:
-                    r2 = random.randint(1, 2)
-                    random_path += [r2]
-            else:
-                random_path += [9]
-                random_path += [r1]
-                if r1 == 4:
-                    r2 = random.randint(5, 6)
-                    random_path += [9]
-                    random_path += [r2]
-                else:
-                    random_path += [9]
-            random_path += [0]
-        if direction == -1:
-            r1 = random.randint(1, 6)
-            if r1 > 3:
-                random_path += [r1]
-                random_path += [9]
-                if r1 == 4:
-                    r2 = random.randint(5, 6)
-                    random_path += [r2]
-            else:
-                random_path += [9]
-                random_path += [r1]
-                if r1 == 3:
-                    r2 = random.randint(1, 2)
-                    random_path += [9]
-                    random_path += [r2]
-                else:
-                    random_path += [9]
-            random_path += [0]
+    #     time.sleep(1)
+    #     random_path = []
+    #     if direction == 1:
+    #         r1 = random.randint(1, 6)
+    #         if r1 < 4:
+    #             random_path += [r1]
+    #             random_path += [9]
+    #             if r1 == 3:
+    #                 r2 = random.randint(1, 2)
+    #                 random_path += [r2]
+    #         else:
+    #             random_path += [9]
+    #             random_path += [r1]
+    #             if r1 == 4:
+    #                 r2 = random.randint(5, 6)
+    #                 random_path += [9]
+    #                 random_path += [r2]
+    #             else:
+    #                 random_path += [9]
+    #         random_path += [0]
+    #     if direction == -1:
+    #         r1 = random.randint(1, 6)
+    #         if r1 > 3:
+    #             random_path += [r1]
+    #             random_path += [9]
+    #             if r1 == 4:
+    #                 r2 = random.randint(5, 6)
+    #                 random_path += [r2]
+    #         else:
+    #             random_path += [9]
+    #             random_path += [r1]
+    #             if r1 == 3:
+    #                 r2 = random.randint(1, 2)
+    #                 random_path += [9]
+    #                 random_path += [r2]
+    #             else:
+    #                 random_path += [9]
+    #         random_path += [0]
+    #
+    #     input_path = random_path
+    #     c1 = input_path.count(9)
+    #     limit = len(input_path) - c1
+    #
+    #     if input_id != temp:
+    #         while i <= limit:
+    #             temp = input_id
+    #             print(i)
+    #             if i == 0:
+    #                 if action == 'loading':
+    #                     input_msg = 'loading_complete'
+    #                     i += 1
+    #                     time.sleep(1)
+    #                 else:
+    #                     time.sleep(1)
+    #                     continue
+    #             elif i < limit:
+    #                 if action == 'unloading':
+    #                     time.sleep(0.7)
+    #                     input_msg = 'unloading_complete'
+    #                     i += 1
+    #                     time.sleep(1)
+    #                 else:
+    #                     time.sleep(1)
+    #             elif i == limit:
+    #                 i += 1
+    #
+    #             command = {
+    #                 'message': input_msg,  # loading_complete / unloading_complete / None
+    #                 'path': tuple(input_path),  # path / None
+    #                 'path_id': input_id,  # to ignore same path
+    #                 'ping': 0
+    #             }
+    #             time.sleep(1)
+    #             command['ping'] = time.time()
+    #             print("Command: ", command)
+    #             sendData = pickle.dumps(command, protocol=3)
+    #             client.send(sendData)
+    #     else:
+    #         time.sleep(0.1)
+    #     i = 0
+    #     print('!!!!!! input_id: ', input_id)
+    #     input_id += 1
 
-        input_path = random_path
-        c1 = input_path.count(9)
-        limit = len(input_path) - c1
 
-        if input_id != temp:
-            while i <= limit:
-                temp = input_id
-                print(i)
-                if i == 0:
-                    if action == 'loading':
-                        input_msg = 'loading_complete'
-                        i += 1
-                        time.sleep(1)
-                    else:
-                        time.sleep(1)
-                        continue
-                elif i < limit:
-                    if action == 'unloading':
-                        time.sleep(0.7)
-                        input_msg = 'unloading_complete'
-                        i += 1
-                        time.sleep(1)
-                    else:
-                        time.sleep(1)
-                elif i == limit:
-                    i += 1
-
-                command = {
-                    'message': input_msg,  # loading_complete / unloading_complete / None
-                    'path': tuple(input_path),  # path / None
-                    'path_id': input_id,  # to ignore same path
-                    'ping': 0
-                }
-                time.sleep(1)
-                command['ping'] = time.time()
-                print("Command: ", command)
-                sendData = pickle.dumps(command, protocol=3)
-                client.send(sendData)
+        input_path = input("path: ")
+        input_id = int(input("path_id: "))
+        if input_id == 0:
+            input_id = None
+        input_msg = input("msg: ")
+        if input_msg == 'l':
+            input_msg = 'loading_complete'
+        elif input_msg == 'u':
+            input_msg = 'unloading_complete'
         else:
-            time.sleep(0.1)
-        i = 0
-        print('!!!!!! input_id: ', input_id)
-        input_id += 1
+            input_msg = None
+
+        command = {
+            'message': input_msg,  # loading_complete / unloading_complete / None
+            'path': tuple(map(int, input_path)),  # path / None
+            'path_id': input_id,  # to ignore same path
+            'ping': 0
+        }
+
+        command['ping'] = time.time()
+        # print("Command: ", command)
+        sendData = pickle.dumps(command, protocol=3)
 
 
-        # input_path = input("path: ")
-        # input_id = int(input("path_id: "))
-        # if input_id == 0:
-        #     input_id = None
-        # input_msg = input("msg: ")
-        # if input_msg == 'l':
-        #     input_msg = 'loading_complete'
-        # elif input_msg == 'u':
-        #     input_msg = 'unloading_complete'
-        # else:
-        #     input_msg = None
-        #
-        # command = {
-        #     'message': input_msg,  # loading_complete / unloading_complete / None
-        #     'path': tuple(map(int, input_path)),  # path / None
-        #     'path_id': input_id,  # to ignore same path
-        #     'ping': 0
-        # }
-        #
-        # command['ping'] = time.time()
-        # # print("Command: ", command)
-        # sendData = pickle.dumps(command, protocol=3)
-        #
-        # client.send(sendData)
+        client.send(sendData)
         # input_id += 1
         # # print("Message: ", massage, time.strftime('%c', time.localtime(time.time())))
         # if massage != current_massage:

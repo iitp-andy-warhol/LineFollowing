@@ -557,9 +557,17 @@ def follower():
                     print("address: 101")
                     address = 1
 
+
+        if operating_drive != 0:
+            stop_block = True
+        else:
+            if ccw and address != 6:
+                stop_block = True
+            elif not ccw and address != 1:
+                stop_block = True
+
         # Stop sign handler
         if not mmode_flag and not stop_block:
-            if operating_drive == 0:
                 if len(contours_red) > 0:
                     print("stopsign: ", time.time() - start_time)
                     stop_trigger = True
@@ -803,6 +811,26 @@ def follower():
         elif key == ord("p"):
             short_mode = False
             print('short off')
+        elif key == ord("i"):
+            print("Froce Forward!!")
+            kit.continuous_servo[0].throttle = 0.4
+            kit.continuous_servo[1].throttle = -1
+            time.sleep(0.1)
+        elif key == ord("j"):
+            print("Froce Left!!")
+            kit.continuous_servo[0].throttle = -1
+            kit.continuous_servo[1].throttle = -1
+            time.sleep(0.1)
+        elif key == ord("l"):
+            print("Froce Right!!")
+            kit.continuous_servo[0].throttle = 1
+            kit.continuous_servo[1].throttle = 1
+            time.sleep(0.1)
+        elif key == ord("k"):
+            print("Froce Back!!")
+            kit.continuous_servo[0].throttle = -0.4
+            kit.continuous_servo[1].throttle = 1
+            time.sleep(0.1)
         # Terminate process
         elif key == ord("q"):
             kit.continuous_servo[0].throttle = 0

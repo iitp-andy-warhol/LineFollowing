@@ -176,7 +176,7 @@ def follower():
             elif address == 3:
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = 1
-                time.sleep(1.25)
+                time.sleep(1.3)
             else:
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = 1
@@ -185,7 +185,7 @@ def follower():
             if address == 0:
                 kit.continuous_servo[0].throttle = -1
                 kit.continuous_servo[1].throttle = -1
-                time.sleep(1.12)
+                time.sleep(1.11)
                 kit.continuous_servo[0].throttle = 0
                 kit.continuous_servo[1].throttle = 0
             elif address == 1:
@@ -349,7 +349,7 @@ def follower():
             pass
         elif not short_flag:
             turnblock2_time = time.time()
-            if turnblock2_time - turnblock_time > 0.5:
+            if turnblock2_time - turnblock_time > 0.8:
                 if area_box < 5000.0:  # obstacle handler
                     Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
                     print('obstacle ahead: ', area_box)

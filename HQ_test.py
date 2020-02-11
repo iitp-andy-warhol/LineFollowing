@@ -27,8 +27,8 @@ def send_robot_status(client):
             dash_file_name = raw_status['dash_file_name']
             error_type = raw_status['error_type']
             continue
-
-        robot_ping = time.time() - raw_status['ping']
+        else:
+            robot_ping = time.time() - raw_status['ping']
 
         if raw_status != current_raw_status:
             # print("Raw status: ", raw_status, time.strftime('%c', time.localtime(time.time())))

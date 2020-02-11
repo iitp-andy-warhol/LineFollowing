@@ -268,6 +268,8 @@ def receive_robot_command(client):
         #         operating_order_idx_lock.release()
         #
         #         next_orderset = None
+
+
         #         # print(2222, next_orderset)
         #
         # if massage['massage'] == 'loading_complete':

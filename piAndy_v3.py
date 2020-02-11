@@ -172,7 +172,7 @@ def follower():
             elif address == 1:
                 kit.continuous_servo[0].throttle = -1
                 kit.continuous_servo[1].throttle = -1
-                time.sleep(1.15)
+                time.sleep(1.0)
             elif address == 3:
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = 1

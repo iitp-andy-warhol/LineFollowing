@@ -198,7 +198,7 @@ def follower():
             elif address == 4:
                 kit.continuous_servo[0].throttle = 1
                 kit.continuous_servo[1].throttle = 1
-                time.sleep(1.1)
+                time.sleep(1.0)
                 kit.continuous_servo[0].throttle = 0.4
                 kit.continuous_servo[1].throttle = -1
                 time.sleep(0.1)
@@ -270,6 +270,8 @@ def follower():
     stop_block = False
     short_case = 0
     short_mode = False
+    temp_flag = False
+    temp_time = 0.0
     turnblock_time = 0.0
     turnblock2_time = 10.0
 
@@ -536,9 +538,13 @@ def follower():
                     address = 1
 
         if not short_flag:
-            if ccw and address == 6 and action == 'moving':
-                stop_block = False
-            elif not ccw and address == 1 and action == 'moving':
+            if ccw and address == 6 and action == 'moving' and not temp_flag:
+                temp_time = time.time()
+                temp_flag = True
+            elif not ccw and address == 1 and action == 'moving' and not temp_flag:
+                temp_time = time.time()
+                temp_flag = True
+            elif temp_flag and (time.time() - temp_time > 0.5):
                 stop_block = False
             else:
                 stop_block = True

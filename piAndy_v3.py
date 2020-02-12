@@ -668,10 +668,10 @@ def follower():
                             time_block = True
                             short_time = time.time()
                             print('new time: ', short_time)
-                        if time.time() - short_time < 2.2:
+                        if time.time() - short_time < 2.3:
                             stop_block = True
                             kit.continuous_servo[0].throttle = -1.0
-                            kit.continuous_servo[1].throttle = 0.28
+                            kit.continuous_servo[1].throttle = 0.25
                         elif time.time() - short_time >= 2.2:
                             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 2
@@ -697,10 +697,10 @@ def follower():
                             time_block = True
                             short_time = time.time()
                             print('new time: ', short_time)
-                        elif time.time() - short_time < 2.2:
+                        elif time.time() - short_time < 2.3:
                             stop_block = True
                             kit.continuous_servo[0].throttle = -0.22
-                            kit.continuous_servo[1].throttle = 0.8
+                            kit.continuous_servo[1].throttle = 0.9
                         elif time.time() - short_time >= 2.2:
                             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 5

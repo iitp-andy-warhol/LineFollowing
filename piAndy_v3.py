@@ -430,6 +430,12 @@ def follower():
             elif list(display) == [9, 5, 9, 0]:
                 short_flag = True
                 short_case = 5
+            elif list(display) == [9, 3, 9, 0]:
+                short_flag = True
+                short_case = 3
+            elif list(display) == [9, 4, 9, 0]:
+                short_flag = True
+                short_case = 4
             else:
                 short_flag = False
 
@@ -725,6 +731,37 @@ def follower():
                         elif time.time() - short_time >= 2.3:
                             Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
                             address = 5
+                    elif operating_drive == 0:
+                        if not time_block:
+                            short_time = time.time()
+                            print('new time: ', short_time)
+                            time_block = True
+                        elif time.time() - short_time < 1.0:
+                            Motor_Steer(0.4, (error * kp) + (ang * ap))
+                        elif time.time() - short_time >= 1.0:
+                            stop_block = False
+                            Motor_Steer(0.4, (error * kp) + (ang * ap))
+                    else:
+                        print('what?')
+
+                elif short_case == 3:
+                    if operating_drive == 3:
+                        if ccw:
+                            short_flag = False
+                            continue
+                        if not time_block:
+                            time_block = True
+                            short_time = time.time()
+                            print('new time: ', short_time)
+                        if time.time() - short_time < 2.3:
+                            stop_block = True
+                            kit.continuous_servo[0].throttle = -1.0
+                            kit.continuous_servo[1].throttle = 0.22
+                        elif 3.5 > time.time() - short_time >= 2.3:
+                            Motor_Steer(-0.4, (error * kp) + (ang * ap), back=True)
+                        elif time.time() - short_time >= 3.5:
+                            Motor_Steer(-0.4, (error * kp) + (ang * ap), stop=True)
+                            address = 2
                     elif operating_drive == 0:
                         if not time_block:
                             short_time = time.time()

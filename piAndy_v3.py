@@ -229,7 +229,7 @@ def follower():
             self.msg = msg
 
         def get_stop(self):
-            global action, stop, get_drive, good_to_go_loading, good_to_go_unloading, time_block
+            global action, stop, get_drive, good_to_go_loading, good_to_go_unloading, time_block, auto_unload, auto_time, auto_block
             if self.id == operating_drive:
                 if self.id == address:
                     stop = True
@@ -244,11 +244,25 @@ def follower():
                             print("Loading Confirm!!!", stop)
                     else:
                         action = "unloading"
+                        if auto_unload:
+                            if not auto_block:
+                                auto_time = time.time()
+                                auto_block = True
+                            else:
+                                if time.time() - auto_time > 2.9:
+                                    good_to_go_unloading = True
+                                    auto_time = 0
+                                    auto_block = False
+                                    auto_unload = False
+                                    print("Auto Unloading!!!")
                         if good_to_go_unloading:
                             stop = False
                             get_drive = True
                             good_to_go_unloading = False
                             time_block = False
+                            auto_time = 0
+                            auto_block = False
+                            auto_unload = False
                             print("Unloading Confirm!!!")
 
     address0 = Address(0, False)
@@ -276,6 +290,9 @@ def follower():
     short_mode = False
     temp_flag = False
     temp_time = 0.0
+    auto_unload = False
+    auto_time = 0
+    auto_block = False
     turnblock_time = 0.0
     turnblock2_time = 10.0
 
@@ -391,6 +408,8 @@ def follower():
                 print("Next drive: ", operating_drive)
                 print("stop: ", stop)
                 get_drive = False
+            if len(current_path) == 2 and current_path[-1] == 0:
+                auto_unload = True
             else:
                 operating_drive = 0
                 get_drive = False

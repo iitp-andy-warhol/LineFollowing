@@ -668,7 +668,7 @@ def follower():
                             time_block = True
                             short_time = time.time()
                             print('new time: ', short_time)
-                        elif time.time() - short_time < 2.2:
+                        if time.time() - short_time < 2.2:
                             stop_block = True
                             kit.continuous_servo[0].throttle = -1.0
                             kit.continuous_servo[1].throttle = 0.28

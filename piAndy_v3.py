@@ -408,7 +408,9 @@ def follower():
                 print("Next drive: ", operating_drive)
                 print("stop: ", stop)
                 get_drive = False
-            if len(current_path) == 2 and current_path[-1] == 0:
+            if len(current_path) == 3 and current_path[-1] == 0 and current_path[-2] == 0:
+                auto_unload = True
+            elif len(current_path) == 2 and current_path[-1] == 0 and current_path[-2] != 9:
                 auto_unload = True
             else:
                 operating_drive = 0

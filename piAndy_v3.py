@@ -20,9 +20,9 @@ def HQ_client():
             recvData = sock.recv(4096)
             command = pickle.loads(recvData)
 
-            if current_command != (command['message'], command['path'], command['path_id']):
+            if current_command != (command['message'], command['path'], command['path_id'], command['message_id']):
                 print("received", command)
-                current_command = (command['message'], command['path'], command['path_id'])
+                current_command = (command['message'], command['path'], command['path_id'], command['message_id'])
 
 
     def send_status(sock):
@@ -205,7 +205,7 @@ def follower():
                 time.sleep(1.0)
                 kit.continuous_servo[0].throttle = 0.4
                 kit.continuous_servo[1].throttle = -1
-                time.sleep(0.2)
+                time.sleep(0.4)
             elif address == 5:
                 kit.continuous_servo[0].throttle = -1
                 kit.continuous_servo[1].throttle = -1
@@ -295,6 +295,7 @@ def follower():
     auto_block = False
     turnblock_time = 0.0
     turnblock2_time = 10.0
+    keep_id = None
 
     current_path_id = None
     current_path = None
@@ -356,12 +357,14 @@ def follower():
             next_path = command['path']
             # current_path_id = path_id
 
-        if command['message'] == 'loading_complete':
+        if command['message'] == 'loading_complete' and command['message_id'] != keep_id:
+            keep_id = command['message_id']
             good_to_go_loading = True
             print('get loading complete!!')
             command['message'] = None
 
-        if command['message'] == 'unloading_complete':
+        if command['message'] == 'unloading_complete' and command['message_id'] != keep_id:
+            keep_id = command['message_id']
             good_to_go_unloading = True
             print('get unloading complete!!')
             command['message'] = None
@@ -926,6 +929,7 @@ command = {
     'message': None,  # loading_complete / unloading_complete / None
     'path': (0,),  # path / None
     'path_id': 9999,  # to ignore same path
+    'message_id': -1,
     'ping' : 0
 }
 

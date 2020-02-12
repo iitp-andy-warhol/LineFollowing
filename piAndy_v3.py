@@ -340,7 +340,7 @@ def follower():
     address0_time = 0
     area_box = 10000.0
     ang_list = []
-    dash_memory = np.zeros((2400, 320, 3))
+    dash_memory = np.zeros((1200, 320, 3))
     dash_block_flag = False
 
     counter = 0
@@ -843,7 +843,7 @@ def follower():
         # Ang error logger
         ang_list += [[time.time() - start_time, ang]]
         if counter % 10 == 0:
-            dash_memory = dash_memory[0:2160]
+            dash_memory = dash_memory[0:960]
             dash_memory = np.vstack((image, dash_memory))
 
         # Key Binding

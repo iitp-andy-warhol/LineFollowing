@@ -533,7 +533,7 @@ def follower():
                     print("address: 203")
                     address = 4
                     road = 0
-                elif address == 4 and ang > 20:
+                elif address == 4 and ang > 10:
                     print("address: 202")
                     address = 5
                 elif address == 5 and ang < -65:

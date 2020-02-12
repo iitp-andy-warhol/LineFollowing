@@ -89,7 +89,7 @@ def follower():
     global send_status_flag, send_status_flag_lock
     global direction, current_address, action, send_status_flag, command
     global good_to_go_loading, good_to_go_unloading, get_drive, stop
-    global dash_file_name, error_type, time_block
+    global dash_file_name, error_type, time_block, auto_unload, auto_time, auto_block
 
     def change_flag(flag):
         if flag:
@@ -868,6 +868,9 @@ dash_file_name = None
 error_type = None
 ping = None
 time_block = False
+auto_unload = False
+auto_time = 0
+auto_block = False
 
 send_status_flag = False
 send_status_flag_lock = th.Lock()

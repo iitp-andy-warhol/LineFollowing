@@ -775,8 +775,8 @@ def follower():
                     else:
                         print('what?')
 
-                elif short_case == 5:
-                    if operating_drive == 5:
+                elif short_case == 4:
+                    if operating_drive == 4:
                         if not ccw:
                             short_flag = False
                             continue

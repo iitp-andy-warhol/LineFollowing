@@ -757,9 +757,9 @@ def follower():
                             stop_block = True
                             kit.continuous_servo[0].throttle = -1.0
                             kit.continuous_servo[1].throttle = 0.22
-                        elif 4.5 > time.time() - short_time >= 2.3:
+                        elif 5.0 > time.time() - short_time >= 2.3:
                             Motor_Steer(0.4, (error * kp) + (ang * ap), back=True)
-                        elif time.time() - short_time >= 4.5:
+                        elif time.time() - short_time >= 5.0:
                             Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
                             address = 3
                     elif operating_drive == 0:
@@ -769,8 +769,9 @@ def follower():
                             time_block = True
                         elif time.time() - short_time < 1.0:
                             Motor_Steer(0.4, (error * kp) + (ang * ap))
-                        elif time.time() - short_time >= 1.0 and address == 1:
-                            stop_block = False
+                        elif time.time() - short_time >= 1.0:
+                            if address == 1:
+                                stop_block = False
                             Motor_Steer(0.4, (error * kp) + (ang * ap))
                     else:
                         print('what?')
@@ -788,9 +789,9 @@ def follower():
                             stop_block = True
                             kit.continuous_servo[0].throttle = -0.21
                             kit.continuous_servo[1].throttle = 1.0
-                        elif 4.5 > time.time() - short_time >= 2.1:
+                        elif 4.7 > time.time() - short_time >= 2.1:
                             Motor_Steer(0.4, (error * kp) + (ang * ap), blind=True)
-                        elif time.time() - short_time >= 4.5:
+                        elif time.time() - short_time >= 4.7:
                             Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
                             address = 4
                     elif operating_drive == 0:
@@ -800,8 +801,9 @@ def follower():
                             time_block = True
                         elif time.time() - short_time < 1.0:
                             Motor_Steer(0.4, (error * kp) + (ang * ap))
-                        elif time.time() - short_time >= 1.0 and address == 1:
-                            stop_block = False
+                        elif time.time() - short_time >= 1.0:
+                            if address == 6:
+                                stop_block = False
                             Motor_Steer(0.4, (error * kp) + (ang * ap))
                     else:
                         print('what?')

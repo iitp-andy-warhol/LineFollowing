@@ -767,11 +767,10 @@ def follower():
                             short_time = time.time()
                             print('new time: ', short_time)
                             time_block = True
-                        elif time.time() - short_time < 1.0:
+                        elif time.time() - short_time < 4.0:
                             Motor_Steer(0.4, (error * kp) + (ang * ap))
-                        elif time.time() - short_time >= 1.0:
-                            if address == 1:
-                                stop_block = False
+                        elif time.time() - short_time >= 4.0:
+                            stop_block = False
                             Motor_Steer(0.4, (error * kp) + (ang * ap))
                     else:
                         print('what?')
@@ -799,11 +798,10 @@ def follower():
                             short_time = time.time()
                             print('new time: ', short_time)
                             time_block = True
-                        elif time.time() - short_time < 1.0:
+                        elif time.time() - short_time < 3.7:
                             Motor_Steer(0.4, (error * kp) + (ang * ap))
-                        elif time.time() - short_time >= 1.0:
-                            if address == 6:
-                                stop_block = False
+                        elif time.time() - short_time >= 3.7:
+                            stop_block = False
                             Motor_Steer(0.4, (error * kp) + (ang * ap))
                     else:
                         print('what?')

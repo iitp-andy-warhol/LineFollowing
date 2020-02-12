@@ -235,7 +235,8 @@ def follower():
                     stop = True
                     Motor_Steer(0.4, (error * kp) + (ang * ap), stop=True)
                     if self.id == 0:
-                        action = "loading"
+                        if not mmode_flag:
+                            action = "loading"
                         if good_to_go_loading:
                             stop = False
                             get_drive = True
@@ -243,7 +244,8 @@ def follower():
                             time_block = False
                             print("Loading Confirm!!!", stop)
                     else:
-                        action = "unloading"
+                        if not mmode_flag:
+                            action = "unloading"
                         if auto_unload:
                             if not auto_block:
                                 auto_time = time.time()
@@ -621,7 +623,8 @@ def follower():
 
         if not stop:
             if short_flag:
-                action = "moving"
+                if not mmode_flag:
+                    action = "moving"
 
                 if short_case == 1:
                     if operating_drive == 1:
@@ -810,7 +813,8 @@ def follower():
                         print('what?')
 
             else:
-                action = "moving"
+                if not mmode_flag:
+                    action = "moving"
                 # print("moving!!")
                 Motor_Steer(0.4, (error * kp) + (ang * ap))
 

@@ -70,7 +70,7 @@ def HQ_client():
         return dic
 
     # Connect to HQ
-    HQ_ip = '128.237.180.49'
+    HQ_ip = '128.237.203.49'
     HQ_port = 8090
 
     clientSock = socket(AF_INET, SOCK_STREAM)
@@ -557,7 +557,7 @@ def follower():
                 elif address == 6 and ang < -20:
                     print("address: 202")
                     address = 5
-                elif address == 5 and ang > 65:
+                elif address == 5 and ang > 61:
                     print("address: 203")
                     address = 4
                 elif address == 4 and ang < 45:

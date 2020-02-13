@@ -438,12 +438,12 @@ def follower():
             elif list(display) == [9, 5, 9, 0]:
                 short_flag = True
                 short_case = 5
-            elif list(display) == [9, 3, 9, 0]:
-                short_flag = True
-                short_case = 3
-            elif list(display) == [9, 4, 9, 0]:
-                short_flag = True
-                short_case = 4
+            # elif list(display) == [9, 3, 9, 0]:
+            #     short_flag = True
+            #     short_case = 3
+            # elif list(display) == [9, 4, 9, 0]:
+            #     short_flag = True
+            #     short_case = 4
             else:
                 short_flag = False
 

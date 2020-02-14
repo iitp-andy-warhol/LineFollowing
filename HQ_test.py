@@ -8,7 +8,7 @@ from datetime import datetime
 import random
 
 
-mid_ip = '128.237.114.101'
+mid_ip = '128.237.203.49'
 
 
 
@@ -79,6 +79,7 @@ def receive_robot_command(client):
     i = 0
     temp = None
     # time.sleep(3)
+    counter = 0
     while True:
         # time.sleep(1)
         # random_path = []
@@ -180,7 +181,8 @@ def receive_robot_command(client):
             'message': input_msg,  # loading_complete / unloading_complete / None
             'path': tuple(map(int, input_path)),  # path / None
             'path_id': input_id,  # to ignore same path
-            'ping': 0
+            'ping': 0,
+            'message_id' : counter
         }
 
         command['ping'] = time.time()
@@ -188,7 +190,7 @@ def receive_robot_command(client):
         sendData = pickle.dumps(command, protocol=3)
 
         client.send(sendData)
-
+        counter += 1
 
         # input_id += 1
         # # print("Message: ", massage, time.strftime('%c', time.localtime(time.time())))

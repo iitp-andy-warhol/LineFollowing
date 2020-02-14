@@ -363,10 +363,10 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
         box = cv2.boxPoints(blackbox)
         box = np.int0(box)
-    #cv2.drawContours(image, [box], 0, (0, 0, 255), 3)
-        #cv2.putText(image, str(ang), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        #cv2.putText(image, str(error), (10, 320), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
-        #cv2.line(image, (int(x_min), 190), (int(x_min), 230), (255, 0, 0), 3)
+    cv2.drawContours(image, [box], 0, (0, 0, 255), 3)
+    cv2.putText(image, str(ang), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+    cv2.putText(image, str(error), (10, 320), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+    cv2.line(image, (int(x_min), 190), (int(x_min), 230), (255, 0, 0), 3)
 
     #cv2.drawContours(image, contours_blk, -1, (0,255,0), 3)
 
